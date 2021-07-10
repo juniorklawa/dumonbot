@@ -1,3 +1,2 @@
-# strackify-api
-
+# dumonbot
 ## Getting Started
