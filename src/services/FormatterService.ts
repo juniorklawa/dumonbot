@@ -1,6 +1,6 @@
-import 'dotenv/config';
 import sentenceBoundaryDetection from 'sbd';
 import NaturalLanguageUnderstandingV1 from 'watson-developer-cloud/natural-language-understanding/v1.js';
+import { Content } from '../classes/Content';
 
 export interface ISentence {
   text: string;
@@ -19,32 +19,13 @@ interface IKeyword {
   text: string;
 }
 
-const getContent = async (content: IContent): Promise<IContent> => {
-  console.log('> [getContent] Starting...');
+export class FormatterService {
+  content: Content;
+  constructor(content: Content) {
+    this.content = content;
+  }
 
-  const fetchContent = async () => {
-    try {
-      const Algorithmia = require('algorithmia');
-
-      const input = {
-        articleName: content.searchTerm,
-        lang: 'pt',
-      };
-      const wikipediaContent = await Algorithmia.client(
-        'simWAGm/BHtzl7wND8EsGzo0RKd1',
-      )
-        .algo('web/WikipediaParser/0.1.2?timeout=300')
-        .pipe(input);
-
-      content.sourceContentOriginal = wikipediaContent.get().summary;
-
-      console.log('> [getContent] Fetching done!');
-    } catch (e) {
-      throw new Error(e);
-    }
-  };
-
-  const sanitizeContent = () => {
+  sanitizeContent() {
     const removeDatesInParentheses = (text: string) => {
       return text
         .replace(/\((?:\([^()]*\)|[^()])*\)/gm, '')
@@ -63,46 +44,46 @@ const getContent = async (content: IContent): Promise<IContent> => {
     };
 
     const withoutBlankLinesAndMarkdown = removeBlankLinesAndMarkdown(
-      content.sourceContentOriginal,
+      this.content.sourceContentOriginal,
     );
     const withoutDatesInParentheses = removeDatesInParentheses(
       withoutBlankLinesAndMarkdown,
     );
-    content.sourceContentSanitized = withoutDatesInParentheses;
-  };
+    this.content.sourceContentSanitized = withoutDatesInParentheses;
+  }
 
-  const breakContentIntoSentences = () => {
+  breakContentIntoSentences() {
     const sentences = sentenceBoundaryDetection.sentences(
-      content.sourceContentSanitized,
+      this.content.sourceContentSanitized,
     );
     sentences.forEach(sentence => {
-      content.sentences.push({
+      this.content.sentences.push({
         text: sentence,
         keywords: [],
         images: [],
       });
     });
-  };
+  }
 
-  const filterSentencesLength = () => {
-    const filteredSenteces = content.sentences.filter(
+  filterSentencesLength() {
+    const filteredSenteces = this.content.sentences.filter(
       sentence =>
         sentence.text.length <= 280 && sentence.text.split(' ').length > 1,
     );
 
-    content.sentences = filteredSenteces;
-  };
+    this.content.sentences = filteredSenteces;
+  }
 
-  const summaryzeSentences = () => {
-    const sentencesChunk = content.sentences.length / 3;
+  summaryzeSentences() {
+    const sentencesChunk = this.content.sentences.length / 3;
 
-    const intro = content.sentences.slice(0, sentencesChunk).slice(0, 4);
+    const intro = this.content.sentences.slice(0, sentencesChunk).slice(0, 4);
 
-    const middle = content.sentences
+    const middle = this.content.sentences
       .slice(sentencesChunk, sentencesChunk * 2)
       .slice(0, 4);
 
-    const conclusionGroup = content.sentences.slice(
+    const conclusionGroup = this.content.sentences.slice(
       sentencesChunk * 2,
       sentencesChunk * 3,
     );
@@ -111,17 +92,15 @@ const getContent = async (content: IContent): Promise<IContent> => {
       conclusionGroup.length - 4,
     );
 
-    content.sentences = [...intro, ...middle, ...conclusionFiltered];
-  };
+    this.content.sentences = [...intro, ...middle, ...conclusionFiltered];
+  }
 
-  const fetchWatsonAndReturnKeywords = (
-    sentence: string,
-  ): Promise<string[]> => {
+  fetchWatsonAndReturnKeywords(sentence: string): Promise<string[]> {
     const nlu = new NaturalLanguageUnderstandingV1({
       iam_apikey: 'HGr6XiPti7IQyiqSSOsu8MPnBqyTe486onezeYN0H1ao',
       version: '2018-04-05',
       url:
-        'https://gateway.watsonplatform.net/natural-language-understanding/api/',
+        'https://api.us-south.natural-language-understanding.watson.cloud.ibm.com/instances/e3add662-9269-4321-962a-5dba77629ae0',
     });
 
     return new Promise((resolve, reject) => {
@@ -147,29 +126,18 @@ const getContent = async (content: IContent): Promise<IContent> => {
         },
       );
     });
-  };
+  }
 
-  async function fetchKeywordsOfAllSentences() {
+  async fetchKeywordsOfAllSentences() {
     console.log('> [text-robot] Starting to fetch keywords from Watson');
 
     // eslint-disable-next-line no-restricted-syntax
-    for await (const sentence of content.sentences) {
+    for await (const sentence of this.content.sentences) {
       console.log(`> [text-robot] Sentence: "${sentence.text}"`);
 
-      sentence.keywords = await fetchWatsonAndReturnKeywords(sentence.text);
+      sentence.keywords = await this.fetchWatsonAndReturnKeywords(sentence.text);
 
       console.log(`> [text-robot] Keywords: ${sentence.keywords.join(', ')}\n`);
     }
   }
-
-  await fetchContent();
-  sanitizeContent();
-  breakContentIntoSentences();
-  filterSentencesLength();
-  summaryzeSentences();
-  await fetchKeywordsOfAllSentences();
-
-  return content;
-};
-
-export default getContent;
+}
