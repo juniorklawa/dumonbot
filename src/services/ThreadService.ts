@@ -7,14 +7,11 @@ interface ICreatedTweet {
 }
 
 export class ThreadService {
-  content: Content;
   private lastTweetId = '';
 
-  constructor(content: Content) {
-    this.content = content;
-  }
+  constructor(private content: Content) {}
 
-  async answerPrevTweet(params: any, i: any) {
+  async answerPrevTweet(params: any, i: any): Promise<ICreatedTweet> {
     const Twit = require('twit');
 
     const fs = require('fs-extra');
@@ -69,12 +66,12 @@ export class ThreadService {
       });
     });
 
-    const createdTweet = await tweetPromise as ICreatedTweet;
-    this.lastTweetId = createdTweet.id_str
+    const createdTweet = (await tweetPromise) as ICreatedTweet;
+    this.lastTweetId = createdTweet.id_str;
     return createdTweet;
   }
 
-  async generateThread() {
+  async generateThread(): Promise<void> {
     const { sentences } = this.content;
     for await (const [i, sentence] of sentences.entries()) {
       const params = {
