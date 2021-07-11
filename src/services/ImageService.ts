@@ -1,15 +1,10 @@
 import { google } from 'googleapis';
 import { Content } from '../classes/Content';
 
-
-
 export class ImagesService {
-  content: Content;
-  constructor(content: Content) {
-    this.content = content;
-  }
+  constructor(private content: Content) {}
 
-  async fetchImagesOfAllSentences() {
+  async fetchImagesOfAllSentences(): Promise<void> {
     for (
       let sentenceIndex = 0;
       sentenceIndex < this.content.sentences.length;
@@ -32,7 +27,7 @@ export class ImagesService {
     }
   }
 
-  async fetchGoogleAndReturnImagesLinks(query: string) {
+  async fetchGoogleAndReturnImagesLinks(query: string): Promise<string | null> {
     const customSearch = google.customsearch('v1');
 
     const response = await customSearch.cse.list({
@@ -50,11 +45,13 @@ export class ImagesService {
         return item.link;
       });
 
-      return imagesUrl;
+      return (imagesUrl as unknown) as string;
     }
+
+    return null;
   }
 
-  async downloadAllImages() {
+  async downloadAllImages(): Promise<void> {
     this.content.downloadedImages = [];
 
     for (
@@ -87,7 +84,7 @@ export class ImagesService {
     }
   }
 
-  async downloadAndSave(url: string, fileName: string) {
+  async downloadAndSave(url: string, fileName: string): Promise<any> {
     const imageDownloader = require('image-downloader');
 
     return imageDownloader.image({

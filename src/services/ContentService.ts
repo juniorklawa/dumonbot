@@ -1,12 +1,9 @@
 import { Content } from '../classes/Content';
 
 export class ContentService {
-  content: Content;
-  constructor(content: Content) {
-    this.content = content;
-  }
+  constructor(private content: Content) {}
 
-  fetchContent = async () => {
+  async fetchContent(): Promise<void> {
     console.log('> [getContent] Starting...');
 
     try {
@@ -28,5 +25,5 @@ export class ContentService {
     } catch (e) {
       throw new Error(e);
     }
-  };
+  }
 }

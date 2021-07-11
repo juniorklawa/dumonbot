@@ -20,12 +20,9 @@ interface IKeyword {
 }
 
 export class FormatterService {
-  content: Content;
-  constructor(content: Content) {
-    this.content = content;
-  }
+  constructor(private content: Content) {}
 
-  sanitizeContent() {
+  sanitizeContent(): void {
     const removeDatesInParentheses = (text: string) => {
       return text
         .replace(/\((?:\([^()]*\)|[^()])*\)/gm, '')
@@ -52,7 +49,7 @@ export class FormatterService {
     this.content.sourceContentSanitized = withoutDatesInParentheses;
   }
 
-  breakContentIntoSentences() {
+  breakContentIntoSentences(): void {
     const sentences = sentenceBoundaryDetection.sentences(
       this.content.sourceContentSanitized,
     );
@@ -65,7 +62,7 @@ export class FormatterService {
     });
   }
 
-  filterSentencesLength() {
+  filterSentencesLength(): void {
     const filteredSenteces = this.content.sentences.filter(
       sentence =>
         sentence.text.length <= 280 && sentence.text.split(' ').length > 1,
@@ -74,7 +71,7 @@ export class FormatterService {
     this.content.sentences = filteredSenteces;
   }
 
-  summaryzeSentences() {
+  summaryzeSentences(): void {
     const sentencesChunk = this.content.sentences.length / 3;
 
     const intro = this.content.sentences.slice(0, sentencesChunk).slice(0, 4);
@@ -128,14 +125,16 @@ export class FormatterService {
     });
   }
 
-  async fetchKeywordsOfAllSentences() {
+  async fetchKeywordsOfAllSentences(): Promise<void> {
     console.log('> [text-robot] Starting to fetch keywords from Watson');
 
     // eslint-disable-next-line no-restricted-syntax
     for await (const sentence of this.content.sentences) {
       console.log(`> [text-robot] Sentence: "${sentence.text}"`);
 
-      sentence.keywords = await this.fetchWatsonAndReturnKeywords(sentence.text);
+      sentence.keywords = await this.fetchWatsonAndReturnKeywords(
+        sentence.text,
+      );
 
       console.log(`> [text-robot] Keywords: ${sentence.keywords.join(', ')}\n`);
     }
