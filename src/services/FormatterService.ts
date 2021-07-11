@@ -94,10 +94,9 @@ export class FormatterService {
 
   fetchWatsonAndReturnKeywords(sentence: string): Promise<string[]> {
     const nlu = new NaturalLanguageUnderstandingV1({
-      iam_apikey: 'HGr6XiPti7IQyiqSSOsu8MPnBqyTe486onezeYN0H1ao',
+      iam_apikey: process.env.WATSON_KEY,
       version: '2018-04-05',
-      url:
-        'https://api.us-south.natural-language-understanding.watson.cloud.ibm.com/instances/e3add662-9269-4321-962a-5dba77629ae0',
+      url: process.env.NLU_URL,
     });
 
     return new Promise((resolve, reject) => {
