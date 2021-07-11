@@ -17,10 +17,10 @@ export class ThreadService {
     const fs = require('fs-extra');
 
     const T = new Twit({
-      consumer_key: 'n0OlAZH30UqqglynopXkwGjcD',
-      consumer_secret: 'Mg6MH596ieqKfoNZdxsNcj91z2yiqeOJwOInxAOnGaYoPtR6AW',
-      access_token: '1366225590332911618-4eGbsrDjbn38aXTIOFzYoH6Ylgpjjn',
-      access_token_secret: 'RbAij1PfmzI6dvA9DdBptsjM2MGNMEl0mZKv2UWEmMeWS',
+      consumer_key: process.env.TWIT_CONSUMER_KEY,
+      consumer_secret: process.env.TWIT_CONSUMER_SECRET,
+      access_token: process.env.TWIT_ACCESS_TOKEN,
+      access_token_secret: process.env.TWIT_ACCESS_TOKEN_SECRET,
       timeout_ms: 60 * 1000, // optional HTTP request timeout to apply to all requests.
       strictSSL: true, // optional - requires SSL certificates to be valid.
     });

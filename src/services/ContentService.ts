@@ -5,7 +5,6 @@ export class ContentService {
 
   async fetchContent(): Promise<void> {
     console.log('> [getContent] Starting...');
-
     try {
       const Algorithmia = require('algorithmia');
 
@@ -14,7 +13,7 @@ export class ContentService {
         lang: 'pt',
       };
       const wikipediaContent = await Algorithmia.client(
-        'simWAGm/BHtzl7wND8EsGzo0RKd1',
+        process.env.ALGORITHMIA_KEY,
       )
         .algo('web/WikipediaParser/0.1.2?timeout=300')
         .pipe(input);

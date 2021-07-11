@@ -31,8 +31,8 @@ export class ImagesService {
     const customSearch = google.customsearch('v1');
 
     const response = await customSearch.cse.list({
-      auth: 'AIzaSyABX74azEv9VM9s9atuwah5RhIxt3tzgfA',
-      cx: 'c2e106af226bc6c10',
+      auth: process.env.CUSTOM_SEARCH_AUTH,
+      cx: process.env.CUSTOM_SEARCH_CX,
       q: query,
       searchType: 'image',
       num: 2,
