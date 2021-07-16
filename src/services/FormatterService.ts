@@ -1,25 +1,10 @@
 import sentenceBoundaryDetection from 'sbd';
 import NaturalLanguageUnderstandingV1 from 'watson-developer-cloud/natural-language-understanding/v1.js';
 import { Content } from '../classes/Content';
+import { IKeyword } from '../models/IKeyWord';
+import { IFormatterService } from './interfaces/IFormatterService';
 
-export interface ISentence {
-  text: string;
-  keywords: string[];
-  images: string[];
-}
-
-export interface IContent {
-  sourceContentOriginal: string;
-  sourceContentSanitized: string;
-  sentences: ISentence[];
-  searchTerm: string;
-}
-
-interface IKeyword {
-  text: string;
-}
-
-export class FormatterService {
+export class FormatterService implements IFormatterService {
   constructor(private content: Content) {}
 
   sanitizeContent(): void {
@@ -93,49 +78,59 @@ export class FormatterService {
   }
 
   fetchWatsonAndReturnKeywords(sentence: string): Promise<string[]> {
-    const nlu = new NaturalLanguageUnderstandingV1({
-      iam_apikey: process.env.WATSON_KEY,
-      version: '2018-04-05',
-      url: process.env.NLU_URL,
-    });
+    try {
+      const nlu = new NaturalLanguageUnderstandingV1({
+        iam_apikey: process.env.WATSON_KEY,
+        version: '2018-04-05',
+        url: process.env.NLU_URL,
+      });
 
-    return new Promise((resolve, reject) => {
-      nlu.analyze(
-        {
-          text: sentence,
-          features: {
-            keywords: {},
+      return new Promise((resolve, reject) => {
+        nlu.analyze(
+          {
+            text: sentence,
+            features: {
+              keywords: {},
+            },
           },
-        },
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (error: string, response: any) => {
-          if (error) {
-            reject(error);
-            return;
-          }
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (error: string, response: any) => {
+            if (error) {
+              reject(error);
+              return;
+            }
 
-          const keywords = response.keywords.map((keyword: IKeyword) => {
-            return keyword.text;
-          });
+            const keywords = response.keywords.map((keyword: IKeyword) => {
+              return keyword.text;
+            });
 
-          resolve(keywords);
-        },
-      );
-    });
+            resolve(keywords);
+          },
+        );
+      });
+    } catch (err) {
+      throw new Error(err);
+    }
   }
 
   async fetchKeywordsOfAllSentences(): Promise<void> {
-    console.log('> [text-robot] Starting to fetch keywords from Watson');
+    try {
+      console.log('> [text-robot] Starting to fetch keywords from Watson');
 
-    // eslint-disable-next-line no-restricted-syntax
-    for await (const sentence of this.content.sentences) {
-      console.log(`> [text-robot] Sentence: "${sentence.text}"`);
+      // eslint-disable-next-line no-restricted-syntax
+      for await (const sentence of this.content.sentences) {
+        console.log(`> [text-robot] Sentence: "${sentence.text}"`);
 
-      sentence.keywords = await this.fetchWatsonAndReturnKeywords(
-        sentence.text,
-      );
+        sentence.keywords = await this.fetchWatsonAndReturnKeywords(
+          sentence.text,
+        );
 
-      console.log(`> [text-robot] Keywords: ${sentence.keywords.join(', ')}\n`);
+        console.log(
+          `> [text-robot] Keywords: ${sentence.keywords.join(', ')}\n`,
+        );
+      }
+    } catch (err) {
+      throw new Error(err);
     }
   }
 }

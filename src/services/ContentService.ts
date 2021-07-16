@@ -1,6 +1,7 @@
 import { Content } from '../classes/Content';
+import { IContentService } from './interfaces/IContentService';
 
-export class ContentService {
+export class ContentService implements IContentService {
   constructor(private content: Content) {}
 
   async fetchContent(): Promise<void> {

@@ -1,9 +1,7 @@
 # dumonbot
 
 - Remove anys
-- S.O.L.I.D
+- Singleton
 - Integration with suggestions
-- .env
 - Logger
-- Errors treatment
 - CI/CD

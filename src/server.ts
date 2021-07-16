@@ -4,6 +4,7 @@ import { FormatterService } from './services/FormatterService';
 import { ImagesService } from './services/ImageService';
 import { ThreadService } from './services/ThreadService';
 import * as dotenv from 'dotenv';
+import { Stepper } from './classes/Stepper';
 
 async function run() {
   dotenv.config();
@@ -14,15 +15,14 @@ async function run() {
   const imageService = new ImagesService(content);
   const threadService = new ThreadService(content);
 
-  await contentService.fetchContent();
-  formatterService.sanitizeContent();
-  formatterService.breakContentIntoSentences();
-  formatterService.filterSentencesLength();
-  formatterService.summaryzeSentences();
-  await formatterService.fetchKeywordsOfAllSentences();
-  await imageService.fetchImagesOfAllSentences();
-  await imageService.downloadAllImages();
-  await threadService.generateThread();
+  const stepper = new Stepper(
+    contentService,
+    formatterService,
+    imageService,
+    threadService,
+  );
+
+  await stepper.execute();
 }
 
 run();
