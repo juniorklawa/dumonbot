@@ -1,7 +1,7 @@
 # dumonbot
 
 - Remove anys
-- Singleton
 - Integration with suggestions
 - Logger
+- Tests
 - CI/CD
