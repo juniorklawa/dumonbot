@@ -20,8 +20,6 @@ async function run() {
 
   await subjectOfTheDay.getSubjectOfTheDay();
 
-  return;
-
   const stepper = new Stepper(
     contentService,
     formatterService,
