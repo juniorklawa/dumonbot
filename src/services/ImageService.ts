@@ -76,7 +76,7 @@ export class ImagesService implements IImageService {
 
           try {
             if (this.content.downloadedImages.includes(imageUrl)) {
-              throw new Error('Image already downloaded');
+              return;
             }
 
             await this.downloadAndSave(
