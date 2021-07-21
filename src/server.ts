@@ -10,15 +10,15 @@ import { SubjectOfTheDayService } from './services/SubjectOfTheDayService';
 async function run() {
   dotenv.config();
 
-  const content = new Content('', '', [], 'Krakatoa', []);
+  const subjectOfTheDayService = new SubjectOfTheDayService();
+
+  const subject = await subjectOfTheDayService.getSubjectOfTheDay();
+
+  const content = new Content('', '', [], subject, []);
   const contentService = new ContentService(content);
   const formatterService = new FormatterService(content);
   const imageService = new ImagesService(content);
   const threadService = new ThreadService(content);
-
-  const subjectOfTheDay = new SubjectOfTheDayService();
-
-  await subjectOfTheDay.getSubjectOfTheDay();
 
   const stepper = new Stepper(
     contentService,

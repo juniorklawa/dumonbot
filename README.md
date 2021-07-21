@@ -5,3 +5,5 @@
 - Logger
 - Tests
 - CI/CD
+- Improve template
+- Remove images

@@ -13,10 +13,14 @@ export class SubjectOfTheDayService {
         },
       );
 
-      const createdSubject = await Subject.create({ name: 'Casemiro' });
+      const fetchedSubjectList = await Subject.aggregate([
+        { $match: { hasThread: false, isAllowed: true } },
+        { $sample: { size: 1 } },
+      ]);
 
-      console.log(createdSubject);
-      return '';
+      const subjectOfTheDay = fetchedSubjectList[0].name as string;
+
+      return subjectOfTheDay;
     } catch (e) {
       throw new Error(e);
     }
