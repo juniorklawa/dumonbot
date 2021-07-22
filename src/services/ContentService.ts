@@ -7,19 +7,23 @@ export class ContentService implements IContentService {
   async fetchContent(): Promise<void> {
     console.log('> [getContent] Starting...');
     try {
-      const Algorithmia = require('algorithmia');
+      const wtf = require('wtf_wikipedia');
 
-      const input = {
-        articleName: this.content.searchTerm,
-        lang: 'pt',
-      };
-      const wikipediaContent = await Algorithmia.client(
-        process.env.ALGORITHMIA_KEY,
-      )
-        .algo('web/WikipediaParser/0.1.2?timeout=300')
-        .pipe(input);
+      const doc = await wtf.fetch(this.content.searchTerm, 'pt');
 
-      this.content.sourceContentOriginal = wikipediaContent.get().summary;
+      this.content.sourceContentOriginal = doc.sections()[0].text();
+
+      // const Algorithmia = require('algorithmia');
+
+      // const input = {
+      //   articleName: this.content.searchTerm,
+      //   lang: 'pt',
+      // };
+      // const wikipediaContent = await Algorithmia.client(
+      //   process.env.ALGORITHMIA_KEY,
+      // )
+      //   .algo('web/WikipediaParser/0.1.2?timeout=300')
+      //   .pipe(input);
 
       console.log('> [getContent] Fetching done!');
     } catch (e) {

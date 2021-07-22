@@ -104,6 +104,13 @@ export class ImagesService implements IImageService {
     try {
       const imageDownloader = require('image-downloader');
 
+      const fs = require('fs');
+      const dir = './content';
+
+      if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir);
+      }
+
       return imageDownloader.image({
         url,
         dest: `./content/${fileName}`,

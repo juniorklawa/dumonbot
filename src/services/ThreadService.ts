@@ -84,6 +84,7 @@ export class ThreadService implements IThreadService {
         console.log(`[make-thread] Tweeting: ${sentence.text}`);
         await this.answerPrevTweet(params, i);
       }
+      console.log(`[make-thread] Finished Thread`);
     } catch (err) {
       throw new Error(err);
     }
