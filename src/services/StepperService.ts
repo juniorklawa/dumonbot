@@ -1,8 +1,8 @@
-import { IContentService } from '../services/interfaces/IContentService';
-import { IFormatterService } from '../services/interfaces/IFormatterService';
-import { IImageService } from '../services/interfaces/IImageService';
-import { IThreadService } from '../services/interfaces/IThreadService';
-import { IStepper } from './interfaces/IStepper';
+import { IContentService } from './interfaces/IContentService';
+import { IFormatterService } from './interfaces/IFormatterService';
+import { IImageService } from './interfaces/IImageService';
+import { IThreadService } from './interfaces/IThreadService';
+import { IStepper } from '../classes/interfaces/IStepper';
 
 export class Stepper implements IStepper {
   constructor(
@@ -22,7 +22,8 @@ export class Stepper implements IStepper {
       await this.formatterService.fetchKeywordsOfAllSentences();
       await this.imageService.fetchImagesOfAllSentences();
       await this.imageService.downloadAllImages();
-      await this.threadService.generateThread();
+      // await this.threadService.generateThread();
+      this.imageService.removeImages();
     } catch (err) {
       console.error(err);
     }

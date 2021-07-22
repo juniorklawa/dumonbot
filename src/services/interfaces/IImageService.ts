@@ -5,4 +5,6 @@ export interface IImageService {
   downloadAllImages(): Promise<void>;
 
   downloadAndSave(url: string, fileName: string): Promise<any>;
+
+  removeImages(): void;
 }

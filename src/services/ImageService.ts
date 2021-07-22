@@ -112,4 +112,21 @@ export class ImagesService implements IImageService {
       throw new Error(err);
     }
   }
+
+  removeImages(): void {
+    const fs = require('fs');
+    const path = require('path');
+
+    const directory = 'content';
+
+    fs.readdir(directory, (err: any, files: any) => {
+      if (err) throw err;
+
+      for (const file of files) {
+        fs.unlink(path.join(directory, file), (err: any) => {
+          if (err) throw err;
+        });
+      }
+    });
+  }
 }

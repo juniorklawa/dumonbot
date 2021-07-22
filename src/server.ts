@@ -4,7 +4,7 @@ import { FormatterService } from './services/FormatterService';
 import { ImagesService } from './services/ImageService';
 import { ThreadService } from './services/ThreadService';
 import * as dotenv from 'dotenv';
-import { Stepper } from './classes/Stepper';
+import { Stepper } from './services/StepperService';
 import { SubjectOfTheDayService } from './services/SubjectOfTheDayService';
 
 async function run() {
@@ -13,7 +13,7 @@ async function run() {
   const subjectOfTheDayService = new SubjectOfTheDayService();
 
   const subject = await subjectOfTheDayService.getSubjectOfTheDay();
-
+  console.log(subject);
   const content = new Content('', '', [], subject, []);
   const contentService = new ContentService(content);
   const formatterService = new FormatterService(content);
