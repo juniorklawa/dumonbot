@@ -23,7 +23,7 @@ export class Stepper implements IStepper {
       await this.imageService.fetchImagesOfAllSentences();
       await this.imageService.downloadAllImages();
       await this.threadService.generateThread();
-      this.imageService.removeImages();
+      // this.imageService.removeImages();
     } catch (err) {
       console.error(err);
     }
