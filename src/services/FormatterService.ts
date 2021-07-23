@@ -74,7 +74,18 @@ export class FormatterService implements IFormatterService {
       conclusionGroup.length - 4,
     );
 
-    this.content.sentences = [...intro, ...middle, ...conclusionFiltered];
+    const introSentence = {
+      text: `A thread de hoje será sobre: ${this.content.searchTerm}`,
+      keywords: [],
+      images: [],
+    };
+
+    this.content.sentences = [
+      introSentence,
+      ...intro,
+      ...middle,
+      ...conclusionFiltered,
+    ];
   }
 
   fetchWatsonAndReturnKeywords(sentence: string): Promise<string[]> {

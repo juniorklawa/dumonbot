@@ -76,6 +76,7 @@ export class ThreadService implements IThreadService {
   async generateThread(): Promise<void> {
     try {
       const { sentences } = this.content;
+
       for await (const [i, sentence] of sentences.entries()) {
         const params = {
           status: sentence.text,
