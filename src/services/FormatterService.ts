@@ -1,7 +1,6 @@
 import sentenceBoundaryDetection from 'sbd';
 import NaturalLanguageUnderstandingV1 from 'watson-developer-cloud/natural-language-understanding/v1.js';
 import { Content } from '../classes/Content';
-import { IKeyword } from '../models/IKeyWord';
 import { IFormatterService } from './interfaces/IFormatterService';
 
 export class FormatterService implements IFormatterService {
@@ -104,18 +103,18 @@ export class FormatterService implements IFormatterService {
               keywords: {},
             },
           },
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          (error: string, response: any) => {
+
+          (error: string, response) => {
             if (error) {
               reject(error);
               return;
             }
 
-            const keywords = response.keywords.map((keyword: IKeyword) => {
+            const keywords = response?.keywords?.map(keyword => {
               return keyword.text;
             });
 
-            resolve(keywords);
+            resolve(keywords as string[]);
           },
         );
       });
