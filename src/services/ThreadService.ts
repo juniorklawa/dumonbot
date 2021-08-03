@@ -2,12 +2,24 @@ import { Content } from '../classes/Content';
 import { ICreatedTweet } from '../models/ICreatedTweet';
 import { IThreadService } from './interfaces/IThreadService';
 
+interface ITweetData {
+  media_id_string: string;
+}
+
+interface ITweetParams {
+  status: string;
+  in_reply_to_status_id: string;
+}
+
 export class ThreadService implements IThreadService {
   private lastTweetId = '';
 
   constructor(private content: Content) {}
 
-  async answerPrevTweet(params: any, i: any): Promise<ICreatedTweet> {
+  async answerPrevTweet(
+    params: ITweetParams,
+    i: number,
+  ): Promise<ICreatedTweet> {
     try {
       const Twit = require('twit');
 
@@ -27,8 +39,8 @@ export class ThreadService implements IThreadService {
 
       const tweetPromise = new Promise((resolve, reject) => {
         T.post('media/upload', { media_data: b64content }, function (
-          err: any,
-          data: any,
+          _: string,
+          data: ITweetData,
         ) {
           const mediaIdStr = data.media_id_string;
           const altText = 'A picture';
@@ -38,18 +50,17 @@ export class ThreadService implements IThreadService {
           };
 
           T.post('media/metadata/create', meta_params, async function (
-            err: any,
+            err: string,
           ) {
             if (!err) {
-              const blau = {
+              const formattedObject = {
                 ...params,
                 media_ids: [mediaIdStr],
               };
 
-              T.post('statuses/update', blau, function (
-                err: any,
-                data: any,
-                response: any,
+              T.post('statuses/update', formattedObject, function (
+                err: string,
+                data: ITweetData,
               ) {
                 if (err) {
                   reject(err);

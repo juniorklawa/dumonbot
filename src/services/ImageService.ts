@@ -100,7 +100,7 @@ export class ImagesService implements IImageService {
     }
   }
 
-  async downloadAndSave(url: string, fileName: string): Promise<any> {
+  async downloadAndSave(url: string, fileName: string): Promise<void> {
     try {
       const imageDownloader = require('image-downloader');
 
@@ -111,7 +111,7 @@ export class ImagesService implements IImageService {
         fs.mkdirSync(dir);
       }
 
-      return imageDownloader.image({
+      imageDownloader.image({
         url,
         dest: `./content/${fileName}`,
       });
@@ -126,12 +126,16 @@ export class ImagesService implements IImageService {
 
     const directory = 'content';
 
-    fs.readdir(directory, (err: any, files: any) => {
-      if (err) throw err;
+    fs.readdir(directory, (err: string, files: string[]) => {
+      if (err) {
+        throw err;
+      }
 
       for (const file of files) {
-        fs.unlink(path.join(directory, file), (err: any) => {
-          if (err) throw err;
+        fs.unlink(path.join(directory, file), (err: string) => {
+          if (err) {
+            throw err;
+          }
         });
       }
     });

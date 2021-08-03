@@ -1,7 +1,5 @@
 # dumonbot
-
-- Remove anys
-- Integration with suggestions
+- Frontend with suggestions
 - Logger
 - Tests
 - CI/CD
