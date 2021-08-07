@@ -3,5 +3,5 @@
 - Logger
 - Tests
 - CI/CD
-- Fix image issue
+- Tweet image index issue
 

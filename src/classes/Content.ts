@@ -1,9 +1,11 @@
+import { ISentence } from '../models/ISentence';
+
 export class Content {
   constructor(
     public sourceContentOriginal: string,
     public sourceContentSanitized: string,
-    public sentences: any[],
+    public sentences: ISentence[],
     public searchTerm: string,
-    public downloadedImages: any[],
+    public downloadedImagesLinks: string[],
   ) {}
 }

@@ -5,53 +5,50 @@ import { IImageService } from './interfaces/IImageService';
 export class ImagesService implements IImageService {
   constructor(private content: Content) {}
 
-  async fetchImagesOfAllSentences(): Promise<void> {
+  async fetchImagesQueriesOfAllSentences(): Promise<void> {
     try {
-      for (
-        let sentenceIndex = 0;
-        sentenceIndex < this.content.sentences.length;
-        sentenceIndex++
-      ) {
+      for await (const [index] of this.content.sentences.entries()) {
         let query;
 
-        if (sentenceIndex === 0) {
+        if (index === 0) {
           query = `${this.content.searchTerm}`;
+        } else if (index === 1) {
+          query = `${this.content.searchTerm} ${this.content.sentences[index].keywords[1]}`;
         } else {
-          query = `${this.content.searchTerm} ${this.content.sentences[sentenceIndex].keywords[0]}`;
+          query = `${this.content.searchTerm} ${this.content.sentences[index].keywords[0]}`;
         }
 
         console.log(`> [image-robot] Querying Google Images with: "${query}"`);
 
-        this.content.sentences[
-          sentenceIndex
-        ].images = await this.fetchGoogleAndReturnImagesLinks(query);
-        this.content.sentences[sentenceIndex].googleSearchQuery = query;
+        this.content.sentences[index].googleSearchQuery = query;
       }
     } catch (err) {
       throw new Error(err);
     }
   }
 
-  async fetchGoogleAndReturnImagesLinks(query: string): Promise<string | null> {
+  async fetchGoogleImagesLinks(): Promise<string[] | null> {
     try {
       const customSearch = google.customsearch('v1');
 
-      const response = await customSearch.cse.list({
-        auth: process.env.CUSTOM_SEARCH_AUTH,
-        cx: process.env.CUSTOM_SEARCH_CX,
-        q: query,
-        searchType: 'image',
-        num: 2,
-      });
-
-      const { data } = response;
-
-      if (data.items) {
-        const imagesUrl = data.items.map(item => {
-          return item.link;
+      for await (const [index, sentence] of this.content.sentences.entries()) {
+        const response = await customSearch.cse.list({
+          auth: process.env.CUSTOM_SEARCH_AUTH,
+          cx: process.env.CUSTOM_SEARCH_CX,
+          q: sentence.googleSearchQuery,
+          searchType: 'image',
+          num: 2,
         });
 
-        return (imagesUrl as unknown) as string;
+        const { data } = response;
+
+        if (data.items) {
+          const imagesUrl = data.items.map(item => {
+            return item.link;
+          });
+
+          this.content.sentences[index].imagesLinks = imagesUrl as string[];
+        }
       }
 
       return null;
@@ -62,32 +59,23 @@ export class ImagesService implements IImageService {
 
   async downloadAllImages(): Promise<void> {
     try {
-      this.content.downloadedImages = [];
+      this.content.downloadedImagesLinks = [];
 
-      for (
-        let sentenceIndex = 0;
-        sentenceIndex < this.content.sentences.length;
-        sentenceIndex++
-      ) {
-        const { images } = this.content.sentences[sentenceIndex];
+      for await (const [sentenceIndex] of this.content.sentences.entries()) {
+        const { imagesLinks } = this.content.sentences[sentenceIndex];
 
-        for (let imageIndex = 0; imageIndex < images.length; imageIndex++) {
-          const imageUrl = images[imageIndex];
+        for await (const [imageIndex] of imagesLinks.entries()) {
+          const imageUrl = imagesLinks[imageIndex];
 
           try {
-            if (this.content.downloadedImages.includes(imageUrl)) {
-              return;
-            }
-
             await this.downloadAndSave(
               imageUrl,
               `${sentenceIndex}-original.png`,
             );
-            this.content.downloadedImages.push(imageUrl);
+            this.content.downloadedImagesLinks.push(imageUrl);
             console.log(
               `> [image-robot] [${sentenceIndex}][${imageIndex}] Image successfully downloaded: ${imageUrl}`,
             );
-            break;
           } catch (error) {
             console.log(
               `> [image-robot] [${sentenceIndex}][${imageIndex}] Error (${imageUrl}): ${error}`,
@@ -95,6 +83,15 @@ export class ImagesService implements IImageService {
           }
         }
       }
+
+      const fs = require('fs');
+      fs.writeFile('content.txt', JSON.stringify(this.content), function (
+        err: string,
+      ) {
+        if (err) {
+          console.log(err);
+        }
+      });
     } catch (err) {
       throw new Error(err);
     }

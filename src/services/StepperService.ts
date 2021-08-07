@@ -20,10 +20,12 @@ export class Stepper implements IStepper {
       this.formatterService.filterSentencesLength();
       this.formatterService.summaryzeSentences();
       await this.formatterService.fetchKeywordsOfAllSentences();
-      await this.imageService.fetchImagesOfAllSentences();
-      await this.imageService.downloadAllImages();
-      await this.threadService.generateThread();
-      this.imageService.removeImages();
+      await this.imageService.fetchImagesQueriesOfAllSentences();
+      await this.imageService.fetchGoogleImagesLinks();
+      // await this.imageService.downloadAllImages();
+
+      // await this.threadService.generateThread();
+      // this.imageService.removeImages();
     } catch (err) {
       console.error(err);
     }

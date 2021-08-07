@@ -1,6 +1,6 @@
 export interface IImageService {
-  fetchImagesOfAllSentences(): Promise<void>;
-  fetchGoogleAndReturnImagesLinks(query: string): Promise<string | null>;
+  fetchImagesQueriesOfAllSentences(): Promise<void>;
+  fetchGoogleImagesLinks(): Promise<string[] | null>;
 
   downloadAllImages(): Promise<void>;
 
