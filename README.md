@@ -1,7 +1,7 @@
 # dumonbot
-- Frontend with suggestions
+- Website with suggestions
 - Logger
 - Tests
 - CI/CD
-- Last tweet: insert source of texts and pictures, and suggestion website
+
 
