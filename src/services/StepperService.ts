@@ -24,7 +24,7 @@ export class Stepper implements IStepper {
       await this.imageService.fetchGoogleImagesLinks();
       await this.imageService.downloadAllImages();
       await this.threadService.generateThread();
-      // this.imageService.removeImages();
+      this.imageService.removeImages();
     } catch (err) {
       console.error(err);
     }

@@ -76,11 +76,11 @@ export class FormatterService implements IFormatterService {
     );
 
     const introSentence = {
-      text: `A thread de hoje será sobre: ${this.content.searchTerm}`,
+      text: `🔎👉 A thread de hoje será sobre: ${this.content.searchTerm}`,
     } as ISentence;
 
     const lastSentence = {
-      text: `Fonte: ${this.content.articleSource}`,
+      text: `📚 Fonte: ${this.content.articleSource}\n\nGostou? me siga para todo dia ter uma thread nova sobre algum assunto aleatório gerado por mim, o DumonBot 🤖\n\n🔗 Quer sugerir algum tema? Entre em www.dumonbot.netlify.com`,
     } as ISentence;
 
     this.content.sentences = [
