@@ -71,21 +71,27 @@ export class ImagesService implements IImageService {
         if (sentenceIndex !== this.content.sentences.length - 1) {
           const { imagesLinks } = this.content.sentences[sentenceIndex];
 
-          for await (const [imageIndex] of imagesLinks.entries()) {
-            const imageUrl = imagesLinks[imageIndex];
+          for await (const [imageIndex, imageUrl] of imagesLinks.entries()) {
+            let imageDownloadUrl = imagesLinks[0];
 
+            if (
+              this.content.downloadedImagesLinks.includes(imageUrl) &&
+              imagesLinks.length > 1
+            ) {
+              imageDownloadUrl = imagesLinks[1];
+            }
             try {
               await this.downloadAndSave(
-                imageUrl,
+                imageDownloadUrl,
                 `${sentenceIndex}-original.png`,
               );
-              this.content.downloadedImagesLinks.push(imageUrl);
+              this.content.downloadedImagesLinks.push(imageDownloadUrl);
               console.log(
                 `> [image-robot] [${sentenceIndex}][${imageIndex}] Image successfully downloaded: ${imageUrl}`,
               );
             } catch (error) {
               console.log(
-                `> [image-robot] [${sentenceIndex}][${imageIndex}] Error (${imageUrl}): ${error}`,
+                `> [image-robot] [${sentenceIndex}][${imageIndex}] Error (${imageDownloadUrl}): ${error}`,
               );
             }
           }

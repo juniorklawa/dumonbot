@@ -15,7 +15,7 @@ async function run() {
   const subject = await subjectOfTheDayService.getSubjectOfTheDay();
   console.log('[ server ] Today subject: ', subject);
 
-  // const storagedContent = require('../content_nasa.json');
+  // const storagedContent = require('../content_working.json');
 
   const content = new Content('', '', [], subject, [], '');
   const contentService = new ContentService(content);
