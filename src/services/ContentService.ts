@@ -12,7 +12,7 @@ export class ContentService implements IContentService {
       const doc = await wtf.fetch(this.content.searchTerm, 'pt');
 
       this.content.sourceContentOriginal = doc.sections()[0].text();
-
+      this.content.articleSource = doc.url();
       console.log('> [getContent] Fetching done!');
     } catch (e) {
       throw new Error(e);

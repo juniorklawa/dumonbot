@@ -1,6 +1,7 @@
-import sentenceBoundaryDetection from 'sbd';
+import sentenceBoundaryDetection, { sentences } from 'sbd';
 import NaturalLanguageUnderstandingV1 from 'watson-developer-cloud/natural-language-understanding/v1.js';
 import { Content } from '../classes/Content';
+import { ISentence } from '../models/ISentence';
 import { IFormatterService } from './interfaces/IFormatterService';
 
 export class FormatterService implements IFormatterService {
@@ -41,7 +42,8 @@ export class FormatterService implements IFormatterService {
       this.content.sentences.push({
         text: sentence,
         keywords: [],
-        images: [],
+        imagesLinks: [],
+        googleSearchQuery: '',
       });
     });
   }
@@ -75,15 +77,18 @@ export class FormatterService implements IFormatterService {
 
     const introSentence = {
       text: `A thread de hoje será sobre: ${this.content.searchTerm}`,
-      keywords: [],
-      images: [],
-    };
+    } as ISentence;
+
+    const lastSentence = {
+      text: `Fonte: ${this.content.articleSource}`,
+    } as ISentence;
 
     this.content.sentences = [
       introSentence,
       ...intro,
       ...middle,
       ...conclusionFiltered,
+      lastSentence,
     ];
   }
 
@@ -128,16 +133,21 @@ export class FormatterService implements IFormatterService {
       console.log('> [text-robot] Starting to fetch keywords from Watson');
 
       // eslint-disable-next-line no-restricted-syntax
-      for await (const sentence of this.content.sentences) {
+      for await (const [
+        sentenceIndex,
+        sentence,
+      ] of this.content.sentences.entries()) {
         console.log(`> [text-robot] Sentence: "${sentence.text}"`);
 
-        sentence.keywords = await this.fetchWatsonAndReturnKeywords(
-          sentence.text,
-        );
+        if (sentenceIndex !== sentences.length - 1) {
+          sentence.keywords = await this.fetchWatsonAndReturnKeywords(
+            sentence.text,
+          );
 
-        console.log(
-          `> [text-robot] Keywords: ${sentence.keywords.join(', ')}\n`,
-        );
+          console.log(
+            `> [text-robot] Keywords: ${sentence.keywords.join(', ')}\n`,
+          );
+        }
       }
     } catch (err) {
       throw new Error(err);

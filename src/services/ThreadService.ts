@@ -33,8 +33,34 @@ export class ThreadService implements IThreadService {
         timeout_ms: 60 * 1000, // optional HTTP request timeout to apply to all requests.
         strictSSL: true, // optional - requires SSL certificates to be valid.
       });
-
       const imagePath = `./content/${i}-original.png`;
+
+      if (
+        i === this.content.sentences.length - 1 ||
+        !fs.existsSync(imagePath)
+      ) {
+        const lastTweetPromisse = new Promise((resolve, reject) => {
+          T.post('statuses/update', params, function (
+            err: string,
+            data: ITweetData,
+          ) {
+            if (err) {
+              reject(err);
+              return;
+            }
+
+            if (data) {
+              resolve(data);
+            }
+          });
+        });
+
+        const createdTweet = (await lastTweetPromisse) as ICreatedTweet;
+        this.lastTweetId = createdTweet.id_str;
+
+        return createdTweet;
+      }
+
       const b64content = fs.readFileSync(imagePath, { encoding: 'base64' });
 
       const tweetPromise = new Promise((resolve, reject) => {
@@ -86,6 +112,15 @@ export class ThreadService implements IThreadService {
 
   async generateThread(): Promise<void> {
     try {
+      // const fs = require('fs');
+      // fs.writeFile('content.txt', JSON.stringify(this.content), function (
+      //   err: string,
+      // ) {
+      //   if (err) {
+      //     console.log(err);
+      //   }
+      // });
+
       const { sentences } = this.content;
 
       for await (const [i, sentence] of sentences.entries()) {
@@ -93,7 +128,11 @@ export class ThreadService implements IThreadService {
           status: sentence.text,
           in_reply_to_status_id: `${this.lastTweetId}`,
         };
-        console.log(`[make-thread] Tweeting: ${sentence.text}`);
+        console.log(
+          `[make-thread] Tweeting ${i + 1}/${this.content.sentences.length}: ${
+            sentence.text
+          }`,
+        );
         await this.answerPrevTweet(params, i);
       }
       console.log(`[make-thread] Finished Thread`);

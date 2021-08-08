@@ -3,5 +3,5 @@
 - Logger
 - Tests
 - CI/CD
-- Tweet image index issue
+- Last tweet: insert source of texts and pictures, and suggestion website
 

@@ -7,5 +7,6 @@ export class Content {
     public sentences: ISentence[],
     public searchTerm: string,
     public downloadedImagesLinks: string[],
+    public articleSource: string,
   ) {}
 }

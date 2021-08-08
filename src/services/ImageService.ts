@@ -8,19 +8,23 @@ export class ImagesService implements IImageService {
   async fetchImagesQueriesOfAllSentences(): Promise<void> {
     try {
       for await (const [index] of this.content.sentences.entries()) {
-        let query;
+        if (index !== this.content.sentences.length - 1) {
+          let query;
 
-        if (index === 0) {
-          query = `${this.content.searchTerm}`;
-        } else if (index === 1) {
-          query = `${this.content.searchTerm} ${this.content.sentences[index].keywords[1]}`;
-        } else {
-          query = `${this.content.searchTerm} ${this.content.sentences[index].keywords[0]}`;
+          if (index === 0) {
+            query = `${this.content.searchTerm}`;
+          } else if (index === 1) {
+            query = `${this.content.searchTerm} ${this.content.sentences[index].keywords[1]}`;
+          } else {
+            query = `${this.content.searchTerm} ${this.content.sentences[index].keywords[0]}`;
+          }
+
+          console.log(
+            `> [image-robot] Querying Google Images with: "${query}"`,
+          );
+
+          this.content.sentences[index].googleSearchQuery = query;
         }
-
-        console.log(`> [image-robot] Querying Google Images with: "${query}"`);
-
-        this.content.sentences[index].googleSearchQuery = query;
       }
     } catch (err) {
       throw new Error(err);
@@ -32,22 +36,24 @@ export class ImagesService implements IImageService {
       const customSearch = google.customsearch('v1');
 
       for await (const [index, sentence] of this.content.sentences.entries()) {
-        const response = await customSearch.cse.list({
-          auth: process.env.CUSTOM_SEARCH_AUTH,
-          cx: process.env.CUSTOM_SEARCH_CX,
-          q: sentence.googleSearchQuery,
-          searchType: 'image',
-          num: 2,
-        });
-
-        const { data } = response;
-
-        if (data.items) {
-          const imagesUrl = data.items.map(item => {
-            return item.link;
+        if (index !== this.content.sentences.length - 1) {
+          const response = await customSearch.cse.list({
+            auth: process.env.CUSTOM_SEARCH_AUTH,
+            cx: process.env.CUSTOM_SEARCH_CX,
+            q: sentence.googleSearchQuery,
+            searchType: 'image',
+            num: 2,
           });
 
-          this.content.sentences[index].imagesLinks = imagesUrl as string[];
+          const { data } = response;
+
+          if (data.items) {
+            const imagesUrl = data.items.map(item => {
+              return item.link;
+            });
+
+            this.content.sentences[index].imagesLinks = imagesUrl as string[];
+          }
         }
       }
 
@@ -62,36 +68,29 @@ export class ImagesService implements IImageService {
       this.content.downloadedImagesLinks = [];
 
       for await (const [sentenceIndex] of this.content.sentences.entries()) {
-        const { imagesLinks } = this.content.sentences[sentenceIndex];
+        if (sentenceIndex !== this.content.sentences.length - 1) {
+          const { imagesLinks } = this.content.sentences[sentenceIndex];
 
-        for await (const [imageIndex] of imagesLinks.entries()) {
-          const imageUrl = imagesLinks[imageIndex];
+          for await (const [imageIndex] of imagesLinks.entries()) {
+            const imageUrl = imagesLinks[imageIndex];
 
-          try {
-            await this.downloadAndSave(
-              imageUrl,
-              `${sentenceIndex}-original.png`,
-            );
-            this.content.downloadedImagesLinks.push(imageUrl);
-            console.log(
-              `> [image-robot] [${sentenceIndex}][${imageIndex}] Image successfully downloaded: ${imageUrl}`,
-            );
-          } catch (error) {
-            console.log(
-              `> [image-robot] [${sentenceIndex}][${imageIndex}] Error (${imageUrl}): ${error}`,
-            );
+            try {
+              await this.downloadAndSave(
+                imageUrl,
+                `${sentenceIndex}-original.png`,
+              );
+              this.content.downloadedImagesLinks.push(imageUrl);
+              console.log(
+                `> [image-robot] [${sentenceIndex}][${imageIndex}] Image successfully downloaded: ${imageUrl}`,
+              );
+            } catch (error) {
+              console.log(
+                `> [image-robot] [${sentenceIndex}][${imageIndex}] Error (${imageUrl}): ${error}`,
+              );
+            }
           }
         }
       }
-
-      const fs = require('fs');
-      fs.writeFile('content.txt', JSON.stringify(this.content), function (
-        err: string,
-      ) {
-        if (err) {
-          console.log(err);
-        }
-      });
     } catch (err) {
       throw new Error(err);
     }
@@ -105,10 +104,10 @@ export class ImagesService implements IImageService {
       const dir = './content';
 
       if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir);
+        await fs.mkdirSync(dir);
       }
 
-      imageDownloader.image({
+      await imageDownloader.image({
         url,
         dest: `./content/${fileName}`,
       });
