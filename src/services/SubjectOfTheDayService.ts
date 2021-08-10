@@ -3,7 +3,7 @@ import Subject from '../models/Subject';
 
 export class SubjectOfTheDayService {
   async getSubjectOfTheDay(): Promise<string> {
-    console.log('> [Get Subject] Starting...');
+    console.log('> [Subject of the day service] Getting subject of the day...');
     try {
       mongoose.connect(
         `mongodb+srv://admin:sqj140uUnEp63nww@cluster0.jxelo.gcp.mongodb.net/dumonbot?retryWrites=true&w=majority`,

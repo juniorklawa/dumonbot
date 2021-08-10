@@ -112,6 +112,7 @@ export class ThreadService implements IThreadService {
 
   async generateThread(): Promise<void> {
     try {
+      console.log('> [Thread Service] Generating thread...');
       // const fs = require('fs');
       // fs.writeFile('content.txt', JSON.stringify(this.content), function (
       //   err: string,
@@ -129,13 +130,13 @@ export class ThreadService implements IThreadService {
           in_reply_to_status_id: `${this.lastTweetId}`,
         };
         console.log(
-          `[make-thread] Tweeting ${i + 1}/${this.content.sentences.length}: ${
-            sentence.text
-          }`,
+          `[Thread Service] Tweeting ${i + 1}/${
+            this.content.sentences.length
+          }: ${sentence.text}`,
         );
         await this.answerPrevTweet(params, i);
       }
-      console.log(`[make-thread] Finished Thread`);
+      console.log(`[Thread Service] Finished Thread`);
     } catch (err) {
       throw new Error(err);
     }
