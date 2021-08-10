@@ -7,6 +7,10 @@ export class ImagesService implements IImageService {
 
   async fetchImagesQueriesOfAllSentences(): Promise<void> {
     try {
+      console.log(
+        `> [Image Service] Fetching images queries of all sentences...`,
+      );
+
       for await (const [index] of this.content.sentences.entries()) {
         if (index !== this.content.sentences.length - 1) {
           let query;
@@ -20,7 +24,7 @@ export class ImagesService implements IImageService {
           }
 
           console.log(
-            `> [image-robot] Querying Google Images with: "${query}"`,
+            `> [Image Service] Querying Google Images with: "${query}"`,
           );
 
           this.content.sentences[index].googleSearchQuery = query;
@@ -33,6 +37,7 @@ export class ImagesService implements IImageService {
 
   async fetchGoogleImagesLinks(): Promise<string[] | null> {
     try {
+      console.log(`> [Image Service] Fetching Google images links...`);
       const customSearch = google.customsearch('v1');
 
       for await (const [index, sentence] of this.content.sentences.entries()) {
@@ -65,6 +70,7 @@ export class ImagesService implements IImageService {
 
   async downloadAllImages(): Promise<void> {
     try {
+      console.log(`> [Image Service] Downloading all images...`);
       this.content.downloadedImagesLinks = [];
 
       for await (const [sentenceIndex] of this.content.sentences.entries()) {
@@ -87,11 +93,11 @@ export class ImagesService implements IImageService {
               );
               this.content.downloadedImagesLinks.push(imageDownloadUrl);
               console.log(
-                `> [image-robot] [${sentenceIndex}][${imageIndex}] Image successfully downloaded: ${imageUrl}`,
+                `> [Image Service] [${sentenceIndex}][${imageIndex}] Image successfully downloaded: ${imageUrl}`,
               );
             } catch (error) {
               console.log(
-                `> [image-robot] [${sentenceIndex}][${imageIndex}] Error (${imageDownloadUrl}): ${error}`,
+                `> [Image Service] [${sentenceIndex}][${imageIndex}] Error (${imageDownloadUrl}): ${error}`,
               );
             }
           }

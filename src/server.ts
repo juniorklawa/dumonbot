@@ -31,6 +31,7 @@ async function run() {
   );
 
   await stepper.execute();
+  process.exit(0);
 }
 
 run();

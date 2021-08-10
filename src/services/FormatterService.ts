@@ -8,6 +8,7 @@ export class FormatterService implements IFormatterService {
   constructor(private content: Content) {}
 
   sanitizeContent(): void {
+    console.log('> [Formatter Service] Sanitizing content...');
     const removeDatesInParentheses = (text: string) => {
       return text
         .replace(/\((?:\([^()]*\)|[^()])*\)/gm, '')
@@ -25,9 +26,12 @@ export class FormatterService implements IFormatterService {
       return withoutBlankLinesAndMarkdown.join(' ');
     };
 
+    console.log('> [Formatter Service] Removing Blank lines and markdown...');
     const withoutBlankLinesAndMarkdown = removeBlankLinesAndMarkdown(
       this.content.sourceContentOriginal,
     );
+
+    console.log('> [Formatter Service] Removing Dates in parentheses...');
     const withoutDatesInParentheses = removeDatesInParentheses(
       withoutBlankLinesAndMarkdown,
     );
@@ -35,6 +39,7 @@ export class FormatterService implements IFormatterService {
   }
 
   breakContentIntoSentences(): void {
+    console.log('> [Formatter Service] Breaking content into sentences...');
     const sentences = sentenceBoundaryDetection.sentences(
       this.content.sourceContentSanitized,
     );
@@ -49,6 +54,7 @@ export class FormatterService implements IFormatterService {
   }
 
   filterSentencesLength(): void {
+    console.log('> [Formatter Service] Filtering sentences length...');
     const filteredSenteces = this.content.sentences.filter(
       sentence =>
         sentence.text.length <= 280 && sentence.text.split(' ').length > 1,
@@ -58,6 +64,7 @@ export class FormatterService implements IFormatterService {
   }
 
   summaryzeSentences(): void {
+    console.log('> [Formatter Service] Summaryzing sentences...');
     const sentencesChunk = this.content.sentences.length / 3;
 
     const intro = this.content.sentences.slice(0, sentencesChunk).slice(0, 4);
@@ -76,7 +83,7 @@ export class FormatterService implements IFormatterService {
     );
 
     const introSentence = {
-      text: `🔎👉 A thread de hoje será sobre: ${this.content.searchTerm}`,
+      text: `🧶A thread de hoje será sobre: ${this.content.searchTerm}\n\nSegue o fio...👇`,
     } as ISentence;
 
     const lastSentence = {
@@ -130,14 +137,16 @@ export class FormatterService implements IFormatterService {
 
   async fetchKeywordsOfAllSentences(): Promise<void> {
     try {
-      console.log('> [text-robot] Starting to fetch keywords from Watson');
+      console.log(
+        '> [Formatter Service] Starting to fetch keywords from Watson...',
+      );
 
       // eslint-disable-next-line no-restricted-syntax
       for await (const [
         sentenceIndex,
         sentence,
       ] of this.content.sentences.entries()) {
-        console.log(`> [text-robot] Sentence: "${sentence.text}"`);
+        console.log(`> [Formatter Service] Sentence: "${sentence.text}"`);
 
         if (sentenceIndex !== sentences.length - 1) {
           sentence.keywords = await this.fetchWatsonAndReturnKeywords(
@@ -145,7 +154,7 @@ export class FormatterService implements IFormatterService {
           );
 
           console.log(
-            `> [text-robot] Keywords: ${sentence.keywords.join(', ')}\n`,
+            `> [Formatter Service] Keywords: ${sentence.keywords.join(', ')}\n`,
           );
         }
       }
