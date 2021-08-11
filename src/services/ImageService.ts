@@ -8,7 +8,7 @@ export class ImagesService implements IImageService {
   async fetchImagesQueriesOfAllSentences(): Promise<void> {
     try {
       console.log(
-        `> [Image Service] Fetching images queries of all sentences...`,
+        `> [Image Service] Fetching images queries of all sentences..`,
       );
 
       for await (const [index] of this.content.sentences.entries()) {
