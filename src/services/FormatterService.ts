@@ -2,10 +2,14 @@ import sentenceBoundaryDetection, { sentences } from 'sbd';
 import NaturalLanguageUnderstandingV1 from 'watson-developer-cloud/natural-language-understanding/v1.js';
 import { Content } from '../classes/Content';
 import { ISentence } from '../models/ISentence';
+import FetchKeywordsProvider from '../providers/FetchKeywordsProvider';
 import { IFormatterService } from './interfaces/IFormatterService';
 
 export class FormatterService implements IFormatterService {
-  constructor(private content: Content) {}
+  constructor(
+    private content: Content,
+    private fetchKeywordsProvider: FetchKeywordsProvider,
+  ) {}
 
   sanitizeContent(): void {
     console.log('> [Formatter Service] Sanitizing content...');
@@ -101,36 +105,10 @@ export class FormatterService implements IFormatterService {
 
   fetchWatsonAndReturnKeywords(sentence: string): Promise<string[]> {
     try {
-      const nlu = new NaturalLanguageUnderstandingV1({
-        iam_apikey: process.env.WATSON_KEY,
-        version: '2018-04-05',
-        url: process.env.NLU_URL,
-      });
+      const keywords = this.fetchKeywordsProvider.fetchKeywords(sentence);
 
-      return new Promise((resolve, reject) => {
-        nlu.analyze(
-          {
-            text: sentence,
-            features: {
-              keywords: {},
-            },
-          },
-
-          (error: string, response) => {
-            if (error) {
-              reject(error);
-              return;
-            }
-
-            const keywords = response?.keywords?.map(keyword => {
-              return keyword.text;
-            });
-
-            resolve(keywords as string[]);
-          },
-        );
-      });
-    } catch (err) {
+      return keywords;
+    } catch (err: any) {
       throw new Error(err);
     }
   }
@@ -158,7 +136,7 @@ export class FormatterService implements IFormatterService {
           );
         }
       }
-    } catch (err) {
+    } catch (err: any) {
       throw new Error(err);
     }
   }

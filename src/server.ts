@@ -1,6 +1,8 @@
 import * as dotenv from 'dotenv';
 import { Content } from './classes/Content';
-import { ContentService } from './services/ContentService';
+import FetchContentProvider from './providers/FetchContentProvider';
+import FetchKeywordsProvider from './providers/FetchKeywordsProvider';
+import ContentService from './services/ContentService';
 import { FormatterService } from './services/FormatterService';
 import { ImagesService } from './services/ImageService';
 import { Stepper } from './services/StepperService';
@@ -16,10 +18,12 @@ async function run() {
   console.log('[ server ] Today subject: ', subject);
 
   // const storagedContent = require('../content_working.json');
+  const fetchContentProvider = new FetchContentProvider();
+  const fetchKeywordsProvider = new FetchKeywordsProvider();
 
   const content = new Content('', '', [], subject, [], '');
-  const contentService = new ContentService(content);
-  const formatterService = new FormatterService(content);
+  const contentService = new ContentService(content, fetchContentProvider);
+  const formatterService = new FormatterService(content, fetchKeywordsProvider);
   const imageService = new ImagesService(content);
   const threadService = new ThreadService(content);
 

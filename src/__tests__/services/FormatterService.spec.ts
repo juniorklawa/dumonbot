@@ -1,6 +1,7 @@
 import { Content } from '../../classes/Content';
 import { ISentence } from '../../models/ISentence';
 import { FormatterService } from '../../services/FormatterService';
+import FakeFetchKeywordsProvider from '../fakes/FakeKeywordsProvider';
 
 describe('FormatterService', () => {
   const mockedContent: Content = require('../mocks/content_working.json');
@@ -12,8 +13,12 @@ describe('FormatterService', () => {
     [],
     '',
   );
+  const fakeFetchKeywordsProvider = new FakeFetchKeywordsProvider();
 
-  const formatterService = new FormatterService(content);
+  const formatterService = new FormatterService(
+    content,
+    fakeFetchKeywordsProvider,
+  );
 
   test('should sanitize content', async () => {
     formatterService.sanitizeContent();
@@ -40,6 +45,14 @@ describe('FormatterService', () => {
 
     expect(sentences).toEqual(
       expect.arrayContaining([introSentence, lastSentence]),
+    );
+  });
+
+  test('should get keywords', async () => {
+    await formatterService.fetchKeywordsOfAllSentences();
+    const sentences = content.sentences;
+    expect(sentences[0].keywords).toEqual(
+      expect.arrayContaining(['foo', 'bar']),
     );
   });
 });

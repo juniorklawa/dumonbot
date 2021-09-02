@@ -21,7 +21,7 @@ export default class SubjectOfTheDayService {
       const subjectOfTheDay = fetchedSubjectList[0].name as string;
 
       return subjectOfTheDay;
-    } catch (e) {
+    } catch (e: any) {
       throw new Error(e);
     }
   }
