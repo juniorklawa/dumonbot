@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import Subject from '../models/Subject';
 
-export class SubjectOfTheDayService {
+export default class SubjectOfTheDayService {
   async getSubjectOfTheDay(): Promise<string> {
     console.log('> [Subject of the day service] Getting subject of the day...');
     try {

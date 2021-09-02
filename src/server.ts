@@ -4,7 +4,7 @@ import { ContentService } from './services/ContentService';
 import { FormatterService } from './services/FormatterService';
 import { ImagesService } from './services/ImageService';
 import { Stepper } from './services/StepperService';
-import { SubjectOfTheDayService } from './services/SubjectOfTheDayService';
+import SubjectOfTheDayService from './services/SubjectOfTheDayService';
 import { ThreadService } from './services/ThreadService';
 
 async function run() {
