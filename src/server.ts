@@ -36,7 +36,7 @@ async function run() {
   const imageDownloaderProvider = new ImageDownloaderProvider();
   const twitterProvider = new TwitterProvider();
 
-  const content = new Content('', '', [], subject, [], '');
+  const content = new Content('', '', [], subject, [], '', '');
   const contentService = new ContentService(content, fetchContentProvider);
   const formatterService = new FormatterService(content, fetchKeywordsProvider);
   const imageService = new ImagesService(

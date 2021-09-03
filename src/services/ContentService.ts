@@ -19,6 +19,13 @@ export default class ContentService implements IContentService {
       'pt',
     );
 
+    const docImage = doc?.images()[0]?.json();
+
+    if (docImage.url) {
+      console.log('TESTEEEE', doc.images()[0].json());
+      this.content.contentThumb = docImage.url;
+    }
+
     this.content.sourceContentOriginal = doc.sections()[0].text();
     this.content.articleSource = doc.url();
 

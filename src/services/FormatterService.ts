@@ -46,7 +46,16 @@ export default class FormatterService implements IFormatterService {
     const sentences = sentenceBoundaryDetection.sentences(
       this.content.sourceContentSanitized,
     );
-    sentences.forEach(sentence => {
+    sentences.forEach((sentence, index) => {
+      if (index === 0) {
+        this.content.sentences.push({
+          text: sentence,
+          keywords: [],
+          imagesLinks: [this.content.contentThumb],
+          googleSearchQuery: '',
+        });
+      }
+
       this.content.sentences.push({
         text: sentence,
         keywords: [],

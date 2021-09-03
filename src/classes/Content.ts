@@ -9,5 +9,6 @@ export class Content implements IContent {
     public searchTerm: string,
     public downloadedImagesLinks: string[],
     public articleSource: string,
+    public contentThumb: string,
   ) {}
 }
