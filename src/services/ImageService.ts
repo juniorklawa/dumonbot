@@ -23,7 +23,7 @@ export default class ImagesService implements IImageService {
         let query;
 
         if (index === 0) {
-          query = `${this.content.searchTerm}`;
+          query = `${this.content.searchTerm} wikipedia`;
         } else if (index === 1) {
           query = `${this.content.searchTerm} ${this.content.sentences[index].keywords[1]}`;
         } else {
