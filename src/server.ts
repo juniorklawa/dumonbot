@@ -1,6 +1,7 @@
 import * as dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import Content from './classes/Content';
+import Subject from './models/Subject';
 import CustomSearchProvider from './providers/CustomSearchProvider';
 import FetchContentProvider from './providers/FetchContentProvider';
 import FetchKeywordsProvider from './providers/FetchKeywordsProvider';
@@ -24,7 +25,7 @@ async function run() {
   const subjectOfTheDayService = new SubjectOfTheDayService();
 
   const subject = await subjectOfTheDayService.getSubjectOfTheDay();
-  console.log('[ server ] Today subject: ', subject);
+  console.log('[ server ] Today subject: ', subject.name);
 
   const fetchContentProvider = new FetchContentProvider();
   const fetchKeywordsProvider = new FetchKeywordsProvider();
@@ -32,7 +33,7 @@ async function run() {
   const imageDownloaderProvider = new ImageDownloaderProvider();
   const twitterProvider = new TwitterProvider();
 
-  const content = new Content('', '', [], subject, [], '');
+  const content = new Content('', '', [], subject.name, [], '');
   const contentService = new ContentService(content, fetchContentProvider);
   const formatterService = new FormatterService(content, fetchKeywordsProvider);
   const imageService = new ImagesService(
@@ -49,6 +50,7 @@ async function run() {
     threadService,
   );
 
+  await Subject.updateOne({ _id: subject._id, hasThread: true });
   await stepper.execute();
   process.exit(0);
 }
