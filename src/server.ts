@@ -50,7 +50,8 @@ async function run() {
     threadService,
   );
 
-  await Subject.updateOne({ _id: subject._id, hasThread: true });
+  await Subject.findOneAndUpdate({ _id: subject._id }, { hasThread: true });
+
   await stepper.execute();
   process.exit(0);
 }
