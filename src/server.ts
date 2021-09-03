@@ -27,6 +27,7 @@ async function run() {
   const subjectOfTheDayService = new SubjectOfTheDayService();
 
   const subject = await subjectOfTheDayService.getSubjectOfTheDay();
+  
   console.log('[ server ] Today subject: ', subject);
 
 
