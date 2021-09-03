@@ -53,7 +53,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "lint": "eslint src --max-warnings=0",  
+    "lint": "eslint . --ext .ts,.tsx --max-warnings=0",  
     "dev:server": "ts-node-dev --transpile-only --ignore-watch node_modules src/server.ts",
     "test": "jest --verbose --silent"
   },
@@ -65,6 +65,6 @@
   },
   
   "lint-staged": {  
-    "src/**/*": ["yarn lint --fix"] 
+    "./src/**/*": ["yarn lint --fix"] 
   }  
 }
