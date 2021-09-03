@@ -1,10 +1,10 @@
-import { IContentService } from './interfaces/IContentService';
-import { IFormatterService } from './interfaces/IFormatterService';
-import { IImageService } from './interfaces/IImageService';
-import { IThreadService } from './interfaces/IThreadService';
-import { IStepper } from '../classes/interfaces/IStepper';
+import { IStepper } from '../interfaces/IStepper';
+import { IContentService } from '../interfaces/IContentService';
+import { IFormatterService } from '../interfaces/IFormatterService';
+import { IImageService } from '../interfaces/IImageService';
+import { IThreadService } from '../interfaces/IThreadService';
 
-export class Stepper implements IStepper {
+export default class StepperService implements IStepper {
   constructor(
     private contentService: IContentService,
     private formatterService: IFormatterService,
@@ -20,7 +20,7 @@ export class Stepper implements IStepper {
       this.formatterService.filterSentencesLength();
       this.formatterService.summaryzeSentences();
       await this.formatterService.fetchKeywordsOfAllSentences();
-      await this.imageService.fetchImagesQueriesOfAllSentences();
+      this.imageService.fetchImagesQueriesOfAllSentences();
       await this.imageService.fetchGoogleImagesLinks();
       await this.imageService.downloadAllImages();
       await this.threadService.generateThread();

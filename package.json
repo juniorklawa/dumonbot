@@ -9,7 +9,7 @@
     "@types/axios": "^0.14.0",
     "@types/cors": "^2.8.8",
     "@types/express": "^4.17.8",
-    "@types/jest": "^26.0.19",
+    "@types/jest": "^27.0.1",
     "@types/morgan": "^1.9.2",
     "@types/sbd": "^1.0.1",
     "@typescript-eslint/eslint-plugin": "^4.4.1",
@@ -20,7 +20,7 @@
     "eslint-import-resolver-typescript": "^2.3.0",
     "eslint-plugin-import": "^2.21.2",
     "eslint-plugin-prettier": "^3.1.4",
-    "jest": "^26.6.3",
+    "jest": "^27.0.6",
     "prettier": "^2.1.2",
     "ts-node-dev": "^1.0.0-pre.63",
     "typescript": "^4.0.5",
@@ -41,7 +41,7 @@
     "mongoose": "^5.13.3",
     "morgan": "^1.10.0",
     "sbd": "^1.0.18",
-    "ts-jest": "^26.4.4",
+    "ts-jest": "^27.0.5",
     "ts-node-dev": "^1.0.0-pre.63",
     "twit": "^2.2.11",
     "typescript": "^4.0.5",
@@ -52,6 +52,6 @@
   "scripts": {
     "build": "tsc",
     "dev:server": "ts-node-dev --transpile-only --ignore-watch node_modules src/server.ts",
-    "test": "jest --forceExit --detectOpenHandles"
+    "test": "jest --verbose --silent"
   }
 }

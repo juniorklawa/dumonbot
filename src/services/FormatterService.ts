@@ -1,11 +1,14 @@
 import sentenceBoundaryDetection, { sentences } from 'sbd';
-import NaturalLanguageUnderstandingV1 from 'watson-developer-cloud/natural-language-understanding/v1.js';
 import { Content } from '../classes/Content';
 import { ISentence } from '../models/ISentence';
-import { IFormatterService } from './interfaces/IFormatterService';
+import FetchKeywordsProvider from '../providers/FetchKeywordsProvider';
+import { IFormatterService } from '../interfaces/IFormatterService';
 
-export class FormatterService implements IFormatterService {
-  constructor(private content: Content) {}
+export default class FormatterService implements IFormatterService {
+  constructor(
+    private content: Content,
+    private fetchKeywordsProvider: FetchKeywordsProvider,
+  ) {}
 
   sanitizeContent(): void {
     console.log('> [Formatter Service] Sanitizing content...');
@@ -100,66 +103,31 @@ export class FormatterService implements IFormatterService {
   }
 
   fetchWatsonAndReturnKeywords(sentence: string): Promise<string[]> {
-    try {
-      const nlu = new NaturalLanguageUnderstandingV1({
-        iam_apikey: process.env.WATSON_KEY,
-        version: '2018-04-05',
-        url: process.env.NLU_URL,
-      });
-
-      return new Promise((resolve, reject) => {
-        nlu.analyze(
-          {
-            text: sentence,
-            features: {
-              keywords: {},
-            },
-          },
-
-          (error: string, response) => {
-            if (error) {
-              reject(error);
-              return;
-            }
-
-            const keywords = response?.keywords?.map(keyword => {
-              return keyword.text;
-            });
-
-            resolve(keywords as string[]);
-          },
-        );
-      });
-    } catch (err) {
-      throw new Error(err);
-    }
+    const keywords = this.fetchKeywordsProvider.fetchKeywords(sentence);
+    return keywords;
   }
 
   async fetchKeywordsOfAllSentences(): Promise<void> {
-    try {
-      console.log(
-        '> [Formatter Service] Starting to fetch keywords from Watson...',
-      );
+    console.log(
+      '> [Formatter Service] Starting to fetch keywords from Watson...',
+    );
 
-      // eslint-disable-next-line no-restricted-syntax
-      for await (const [
-        sentenceIndex,
-        sentence,
-      ] of this.content.sentences.entries()) {
-        console.log(`> [Formatter Service] Sentence: "${sentence.text}"`);
+    // eslint-disable-next-line no-restricted-syntax
+    for await (const [
+      sentenceIndex,
+      sentence,
+    ] of this.content.sentences.entries()) {
+      console.log(`> [Formatter Service] Sentence: "${sentence.text}"`);
 
-        if (sentenceIndex !== sentences.length - 1) {
-          sentence.keywords = await this.fetchWatsonAndReturnKeywords(
-            sentence.text,
-          );
+      if (sentenceIndex !== sentences.length - 1) {
+        sentence.keywords = await this.fetchWatsonAndReturnKeywords(
+          sentence.text,
+        );
 
-          console.log(
-            `> [Formatter Service] Keywords: ${sentence.keywords.join(', ')}\n`,
-          );
-        }
+        console.log(
+          `> [Formatter Service] Keywords: ${sentence.keywords.join(', ')}\n`,
+        );
       }
-    } catch (err) {
-      throw new Error(err);
     }
   }
 }

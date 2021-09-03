@@ -1,6 +1,7 @@
+import { IContent } from '../models/IContent';
 import { ISentence } from '../models/ISentence';
 
-export class Content {
+export class Content implements IContent {
   constructor(
     public sourceContentOriginal: string,
     public sourceContentSanitized: string,
