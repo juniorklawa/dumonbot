@@ -1,4 +1,4 @@
-import IFetchKeywordsProvider from '../../classes/interfaces/IFetchKeywordsProvider';
+import IFetchKeywordsProvider from '../../interfaces/IFetchKeywordsProvider';
 
 export default class FakeFetchKeywordsProvider
   implements IFetchKeywordsProvider {

@@ -2,7 +2,7 @@ import { Content } from '../classes/Content';
 import CustomSearchProvider from '../providers/CustomSearchProvider';
 import ImageDownloaderProvider from '../providers/ImageDownloaderProvider';
 import { ICustomSearchItem } from '../__tests__/fakes/FakeCustomSearchProvider';
-import { IImageService } from './interfaces/IImageService';
+import { IImageService } from '../interfaces/IImageService';
 export default class ImagesService implements IImageService {
   constructor(
     private content: Content,

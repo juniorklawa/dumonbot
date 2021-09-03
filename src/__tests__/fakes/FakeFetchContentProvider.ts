@@ -1,5 +1,5 @@
 import { Content } from '../../classes/Content';
-import IFetchContentProvider from '../../classes/interfaces/IFetchContentProvider';
+import IFetchContentProvider from '../../interfaces/IFetchContentProvider';
 
 export default class FakeFetchContentProvider implements IFetchContentProvider {
   async fetch(_searchTerm: string, _language: string): Promise<any> {

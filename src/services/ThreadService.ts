@@ -1,6 +1,6 @@
 import { Content } from '../classes/Content';
 import { ICreatedTweet } from '../models/ICreatedTweet';
-import { IThreadService } from './interfaces/IThreadService';
+import { IThreadService } from '../interfaces/IThreadService';
 
 interface ITweetData {
   media_id_string: string;

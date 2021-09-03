@@ -1,4 +1,4 @@
-import ICustomSearchProvider from '../../classes/interfaces/ICustomSearchProvider';
+import ICustomSearchProvider from '../../interfaces/ICustomSearchProvider';
 
 export interface ICustomSearchItem {
   link: string;

@@ -1,8 +1,8 @@
-import { IStepper } from '../classes/interfaces/IStepper';
-import { IContentService } from './interfaces/IContentService';
-import { IFormatterService } from './interfaces/IFormatterService';
-import { IImageService } from './interfaces/IImageService';
-import { IThreadService } from './interfaces/IThreadService';
+import { IStepper } from '../interfaces/IStepper';
+import { IContentService } from '../interfaces/IContentService';
+import { IFormatterService } from '../interfaces/IFormatterService';
+import { IImageService } from '../interfaces/IImageService';
+import { IThreadService } from '../interfaces/IThreadService';
 
 export default class StepperService implements IStepper {
   constructor(

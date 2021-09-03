@@ -1,5 +1,5 @@
 import { google } from 'googleapis';
-import ICustomSearchProvider from '../classes/interfaces/ICustomSearchProvider';
+import ICustomSearchProvider from '../interfaces/ICustomSearchProvider';
 
 export default class CustomSearchProvider implements ICustomSearchProvider {
   async getSearchResult(googleSearchQuery: string): Promise<any> {

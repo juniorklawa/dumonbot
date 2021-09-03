@@ -1,6 +1,6 @@
 import { Content } from '../classes/Content';
 import FetchContentProvider from '../providers/FetchContentProvider';
-import { IContentService } from './interfaces/IContentService';
+import { IContentService } from '../interfaces/IContentService';
 
 export default class ContentService implements IContentService {
   constructor(

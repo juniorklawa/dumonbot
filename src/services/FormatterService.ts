@@ -2,7 +2,7 @@ import sentenceBoundaryDetection, { sentences } from 'sbd';
 import { Content } from '../classes/Content';
 import { ISentence } from '../models/ISentence';
 import FetchKeywordsProvider from '../providers/FetchKeywordsProvider';
-import { IFormatterService } from './interfaces/IFormatterService';
+import { IFormatterService } from '../interfaces/IFormatterService';
 
 export default class FormatterService implements IFormatterService {
   constructor(
