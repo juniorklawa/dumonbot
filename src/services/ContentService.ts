@@ -1,11 +1,11 @@
-import { Content } from '../classes/Content';
-import FetchContentProvider from '../providers/FetchContentProvider';
 import { IContentService } from '../interfaces/IContentService';
+import IFetchContentProvider from '../interfaces/IFetchContentProvider';
+import { IContent } from '../models/IContent';
 
 export default class ContentService implements IContentService {
   constructor(
-    private content: Content,
-    private fetchContentProvider: FetchContentProvider,
+    private content: IContent,
+    private fetchContentProvider: IFetchContentProvider,
   ) {}
 
   async fetchContent(): Promise<void> {

@@ -1,4 +1,4 @@
-import { Content } from '../../classes/Content';
+import Content from '../../classes/Content';
 import ThreadService from '../../services/ThreadService';
 import FakeTwitterProvider from '../fakes/FakeTwitterProvider';
 

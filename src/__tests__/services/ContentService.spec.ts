@@ -1,4 +1,4 @@
-import { Content } from '../../classes/Content';
+import Content from '../../classes/Content';
 import ContentService from '../../services/ContentService';
 import FakeFetchContentProvider from '../fakes/FakeFetchContentProvider';
 

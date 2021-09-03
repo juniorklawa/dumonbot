@@ -1,4 +1,4 @@
-import { Content } from '../../classes/Content';
+import Content from '../../classes/Content';
 import { ISentence } from '../../models/ISentence';
 import FormatterService from '../../services/FormatterService';
 import FakeFetchKeywordsProvider from '../fakes/FakeKeywordsProvider';

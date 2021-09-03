@@ -1,7 +1,7 @@
-import { Content } from '../classes/Content';
 import { IThreadService } from '../interfaces/IThreadService';
 import { ITweetParams } from '../interfaces/ITweetParams';
-import TwitterProvider from '../providers/TwitterProvider';
+import ITwitterProvider from '../interfaces/ITwitterProvider';
+import { IContent } from '../models/IContent';
 
 export interface ITweetData {
   media_id_string: string;
@@ -12,8 +12,8 @@ export default class ThreadService implements IThreadService {
   private lastTweetId = '';
 
   constructor(
-    private content: Content,
-    private twitterProvider: TwitterProvider,
+    private content: IContent,
+    private twitterProvider: ITwitterProvider,
   ) {}
 
   async answerPrevTweet(params: ITweetParams, i: number): Promise<ITweetData> {

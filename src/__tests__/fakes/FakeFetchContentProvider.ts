@@ -1,4 +1,4 @@
-import { Content } from '../../classes/Content';
+import Content from '../../classes/Content';
 import IFetchContentProvider from '../../interfaces/IFetchContentProvider';
 import { IWikipediaDoc } from '../../interfaces/IWikipediaDoc';
 

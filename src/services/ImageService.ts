@@ -1,16 +1,16 @@
-import { Content } from '../classes/Content';
 import {
   ICustomSearchData,
   ICustomSearchItem,
 } from '../interfaces/ICustomSearchData';
+import ICustomSearchProvider from '../interfaces/ICustomSearchProvider';
+import IImageDownloaderProvider from '../interfaces/IImageDownloaderProvider';
 import { IImageService } from '../interfaces/IImageService';
-import CustomSearchProvider from '../providers/CustomSearchProvider';
-import ImageDownloaderProvider from '../providers/ImageDownloaderProvider';
+import { IContent } from '../models/IContent';
 export default class ImagesService implements IImageService {
   constructor(
-    private content: Content,
-    private customSearchProvider: CustomSearchProvider,
-    private imageDownloaderProvider: ImageDownloaderProvider,
+    private content: IContent,
+    private customSearchProvider: ICustomSearchProvider,
+    private imageDownloaderProvider: IImageDownloaderProvider,
   ) {}
 
   fetchImagesQueriesOfAllSentences(): void {
