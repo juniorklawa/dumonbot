@@ -105,7 +105,7 @@ export class ThreadService implements IThreadService {
       const createdTweet = (await tweetPromise) as ICreatedTweet;
       this.lastTweetId = createdTweet.id_str;
       return createdTweet;
-    } catch (err) {
+    } catch (err: any) {
       throw new Error(err);
     }
   }
@@ -113,14 +113,6 @@ export class ThreadService implements IThreadService {
   async generateThread(): Promise<void> {
     try {
       console.log('> [Thread Service] Generating thread...');
-      // const fs = require('fs');
-      // fs.writeFile('content.txt', JSON.stringify(this.content), function (
-      //   err: string,
-      // ) {
-      //   if (err) {
-      //     console.log(err);
-      //   }
-      // });
 
       const { sentences } = this.content;
 
@@ -137,7 +129,7 @@ export class ThreadService implements IThreadService {
         await this.answerPrevTweet(params, i);
       }
       console.log(`[Thread Service] Finished Thread`);
-    } catch (err) {
+    } catch (err: any) {
       throw new Error(err);
     }
   }

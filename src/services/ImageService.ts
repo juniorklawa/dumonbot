@@ -1,17 +1,22 @@
-import { google } from 'googleapis';
 import { Content } from '../classes/Content';
+import CustomSearchProvider from '../providers/CustomSearchProvider';
+import ImageDownloaderProvider from '../providers/ImageDownloaderProvider';
+import { ICustomSearchItem } from '../__tests__/fakes/FakeCustomSearchProvider';
 import { IImageService } from './interfaces/IImageService';
+export default class ImagesService implements IImageService {
+  constructor(
+    private content: Content,
+    private customSearchProvider: CustomSearchProvider,
+    private imageDownloaderProvider: ImageDownloaderProvider,
+  ) {}
 
-export class ImagesService implements IImageService {
-  constructor(private content: Content) {}
-
-  async fetchImagesQueriesOfAllSentences(): Promise<void> {
+  fetchImagesQueriesOfAllSentences(): void {
     try {
       console.log(
         `> [Image Service] Fetching images queries of all sentences...`,
       );
 
-      for await (const [index] of this.content.sentences.entries()) {
+      for (const [index] of this.content.sentences.entries()) {
         if (index !== this.content.sentences.length - 1) {
           let query;
 
@@ -30,7 +35,7 @@ export class ImagesService implements IImageService {
           this.content.sentences[index].googleSearchQuery = query;
         }
       }
-    } catch (err) {
+    } catch (err: any) {
       throw new Error(err);
     }
   }
@@ -38,22 +43,16 @@ export class ImagesService implements IImageService {
   async fetchGoogleImagesLinks(): Promise<string[] | null> {
     try {
       console.log(`> [Image Service] Fetching Google images links...`);
-      const customSearch = google.customsearch('v1');
 
       for await (const [index, sentence] of this.content.sentences.entries()) {
         if (index !== this.content.sentences.length - 1) {
-          const response = await customSearch.cse.list({
-            auth: process.env.CUSTOM_SEARCH_AUTH,
-            cx: process.env.CUSTOM_SEARCH_CX,
-            q: sentence.googleSearchQuery,
-            searchType: 'image',
-            num: 2,
-          });
+          const response = await this.customSearchProvider.getSearchResult(
+            sentence.googleSearchQuery,
+          );
 
           const { data } = response;
-
           if (data.items) {
-            const imagesUrl = data.items.map(item => {
+            const imagesUrl = data.items.map((item: ICustomSearchItem) => {
               return item.link;
             });
 
@@ -63,7 +62,7 @@ export class ImagesService implements IImageService {
       }
 
       return null;
-    } catch (err) {
+    } catch (err: any) {
       throw new Error(err);
     }
   }
@@ -103,15 +102,13 @@ export class ImagesService implements IImageService {
           }
         }
       }
-    } catch (err) {
+    } catch (err: any) {
       throw new Error(err);
     }
   }
 
   async downloadAndSave(url: string, fileName: string): Promise<void> {
     try {
-      const imageDownloader = require('image-downloader');
-
       const fs = require('fs');
       const dir = './content';
 
@@ -119,11 +116,8 @@ export class ImagesService implements IImageService {
         await fs.mkdirSync(dir);
       }
 
-      await imageDownloader.image({
-        url,
-        dest: `./content/${fileName}`,
-      });
-    } catch (err) {
+      await this.imageDownloaderProvider.downloadImage(url, fileName);
+    } catch (err: any) {
       throw new Error(err);
     }
   }
