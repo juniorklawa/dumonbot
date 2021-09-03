@@ -1,10 +1,10 @@
 # dumonbot
-- Tests
-- Remove anys
-- Subject of the day undefined
-- Check if all mongo documents can be found in wtf wikipedia
-- Update mongo suggestions with hasThread = true
-- Deploy on Raspberry Pi 3 (PM2)
-- Website with suggestions and check in wtf wikipedia
+- Tests (feat)
+- Subject of the day undefined (bug)
+- Remove anys (improvement)
+- Check if all actual mongo documents can be found in wtf wikipedia (improvement)
+- Update mongo suggestions with hasThread = true (feature)
+- Deploy on Raspberry Pi 3 (PM2) (devops)
+- Website with suggestions and check in wtf wikipedia (feature)
 
 
