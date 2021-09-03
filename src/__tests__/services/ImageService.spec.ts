@@ -1,4 +1,4 @@
-import  Content  from '../../classes/Content';
+import Content from '../../classes/Content';
 import ImagesService from '../../services/ImageService';
 import FakeCustomSearchProvider from '../fakes/FakeCustomSearchProvider';
 import FakeImageDownloaderProvider from '../fakes/FakeImageDownloaderProvider';
