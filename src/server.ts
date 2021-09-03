@@ -1,6 +1,6 @@
 import * as dotenv from 'dotenv';
 import mongoose from 'mongoose';
-import { Content } from './classes/Content';
+import Content from './classes/Content';
 import CustomSearchProvider from './providers/CustomSearchProvider';
 import FetchContentProvider from './providers/FetchContentProvider';
 import FetchKeywordsProvider from './providers/FetchKeywordsProvider';

@@ -1,13 +1,13 @@
 import sentenceBoundaryDetection from 'sbd';
-import { Content } from '../classes/Content';
-import { ISentence } from '../models/ISentence';
-import FetchKeywordsProvider from '../providers/FetchKeywordsProvider';
+import IFetchKeywordsProvider from '../interfaces/IFetchKeywordsProvider';
 import { IFormatterService } from '../interfaces/IFormatterService';
+import { IContent } from '../models/IContent';
+import { ISentence } from '../models/ISentence';
 
 export default class FormatterService implements IFormatterService {
   constructor(
-    private content: Content,
-    private fetchKeywordsProvider: FetchKeywordsProvider,
+    private content: IContent,
+    private fetchKeywordsProvider: IFetchKeywordsProvider,
   ) {}
 
   sanitizeContent(): void {
