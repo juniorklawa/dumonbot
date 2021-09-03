@@ -6,11 +6,11 @@ import FetchContentProvider from './providers/FetchContentProvider';
 import FetchKeywordsProvider from './providers/FetchKeywordsProvider';
 import ImageDownloaderProvider from './providers/ImageDownloaderProvider';
 import ContentService from './services/ContentService';
-import { FormatterService } from './services/FormatterService';
+import  FormatterService  from './services/FormatterService';
 import ImagesService from './services/ImageService';
-import { Stepper } from './services/StepperService';
+import StepperService from './services/StepperService';
 import SubjectOfTheDayService from './services/SubjectOfTheDayService';
-import { ThreadService } from './services/ThreadService';
+import ThreadService from './services/ThreadService';
 
 async function run() {
   dotenv.config();
@@ -44,7 +44,7 @@ async function run() {
   );
   const threadService = new ThreadService(content);
 
-  const stepper = new Stepper(
+  const stepper = new StepperService(
     contentService,
     formatterService,
     imageService,

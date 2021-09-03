@@ -11,7 +11,7 @@ interface ITweetParams {
   in_reply_to_status_id: string;
 }
 
-export class ThreadService implements IThreadService {
+export default class ThreadService implements IThreadService {
   private lastTweetId = '';
 
   constructor(private content: Content) {}

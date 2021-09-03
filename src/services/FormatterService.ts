@@ -1,11 +1,10 @@
 import sentenceBoundaryDetection, { sentences } from 'sbd';
-import NaturalLanguageUnderstandingV1 from 'watson-developer-cloud/natural-language-understanding/v1.js';
 import { Content } from '../classes/Content';
 import { ISentence } from '../models/ISentence';
 import FetchKeywordsProvider from '../providers/FetchKeywordsProvider';
 import { IFormatterService } from './interfaces/IFormatterService';
 
-export class FormatterService implements IFormatterService {
+export default class FormatterService implements IFormatterService {
   constructor(
     private content: Content,
     private fetchKeywordsProvider: FetchKeywordsProvider,

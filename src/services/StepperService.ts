@@ -1,10 +1,10 @@
+import { IStepper } from '../classes/interfaces/IStepper';
 import { IContentService } from './interfaces/IContentService';
 import { IFormatterService } from './interfaces/IFormatterService';
 import { IImageService } from './interfaces/IImageService';
 import { IThreadService } from './interfaces/IThreadService';
-import { IStepper } from '../classes/interfaces/IStepper';
 
-export class Stepper implements IStepper {
+export default class StepperService implements IStepper {
   constructor(
     private contentService: IContentService,
     private formatterService: IFormatterService,
