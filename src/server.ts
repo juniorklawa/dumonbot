@@ -16,19 +16,15 @@ import ThreadService from './services/ThreadService';
 async function run() {
   dotenv.config();
 
-  mongoose.connect(
-    `mongodb+srv://admin:sqj140uUnEp63nww@cluster0.jxelo.gcp.mongodb.net/dumonbot?retryWrites=true&w=majority`,
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    },
-  );
+  mongoose.connect(process.env.MONGO_URL as string, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
 
   const subjectOfTheDayService = new SubjectOfTheDayService();
 
   const subject = await subjectOfTheDayService.getSubjectOfTheDay();
   console.log('[ server ] Today subject: ', subject);
-
 
   const fetchContentProvider = new FetchContentProvider();
   const fetchKeywordsProvider = new FetchKeywordsProvider();
