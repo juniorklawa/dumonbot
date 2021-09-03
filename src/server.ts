@@ -29,7 +29,7 @@ async function run() {
   const subject = await subjectOfTheDayService.getSubjectOfTheDay();
   console.log('[ server ] Today subject: ', subject);
 
-  // const storagedContent = require('../content_working.json');
+
   const fetchContentProvider = new FetchContentProvider();
   const fetchKeywordsProvider = new FetchKeywordsProvider();
   const customSearchProvider = new CustomSearchProvider();
