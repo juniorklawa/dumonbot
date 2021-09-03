@@ -1,5 +1,4 @@
 # dumonbot
-- Remove anys (improvement)
 - Check if all actual mongo documents can be found in wtf wikipedia (improvement)
 - Pick the first picture from wikipedia
 - Update mongo suggestions with hasThread = true (feature)
