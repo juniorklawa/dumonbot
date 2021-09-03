@@ -13,6 +13,6 @@ describe('SubjectOfTheDayService', () => {
 
     const subject = await subjectOfTheDayService.getSubjectOfTheDay();
 
-    expect(subject).toBe('Santos Dumont');
+    expect(subject.name).toBe('Santos Dumont');
   });
 });
