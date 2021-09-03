@@ -2,7 +2,7 @@ import { google } from 'googleapis';
 import ICustomSearchProvider from '../interfaces/ICustomSearchProvider';
 
 export default class CustomSearchProvider implements ICustomSearchProvider {
-  async getSearchResult(googleSearchQuery: string): Promise<any> {
+  async getSearchResult(googleSearchQuery: string): Promise<unknown> {
     const customSearch = google.customsearch('v1');
 
     const response = await customSearch.cse.list({

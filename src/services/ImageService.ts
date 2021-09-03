@@ -1,8 +1,11 @@
 import { Content } from '../classes/Content';
+import {
+  ICustomSearchData,
+  ICustomSearchItem,
+} from '../interfaces/ICustomSearchData';
+import { IImageService } from '../interfaces/IImageService';
 import CustomSearchProvider from '../providers/CustomSearchProvider';
 import ImageDownloaderProvider from '../providers/ImageDownloaderProvider';
-import { ICustomSearchItem } from '../__tests__/fakes/FakeCustomSearchProvider';
-import { IImageService } from '../interfaces/IImageService';
 export default class ImagesService implements IImageService {
   constructor(
     private content: Content,
@@ -45,7 +48,7 @@ export default class ImagesService implements IImageService {
           sentence.googleSearchQuery,
         );
 
-        const { data } = response;
+        const { data } = response as ICustomSearchData;
         if (data.items) {
           const imagesUrl = data.items.map((item: ICustomSearchItem) => {
             return item.link;

@@ -1,16 +1,11 @@
 import { Content } from '../classes/Content';
 import { IThreadService } from '../interfaces/IThreadService';
-import { ICreatedTweet } from '../models/ICreatedTweet';
+import { ITweetParams } from '../interfaces/ITweetParams';
 import TwitterProvider from '../providers/TwitterProvider';
 
 export interface ITweetData {
   media_id_string: string;
   id_str: string;
-}
-
-interface ITweetParams {
-  status: string;
-  in_reply_to_status_id: string;
 }
 
 export default class ThreadService implements IThreadService {
@@ -21,10 +16,7 @@ export default class ThreadService implements IThreadService {
     private twitterProvider: TwitterProvider,
   ) {}
 
-  async answerPrevTweet(
-    params: ITweetParams,
-    i: number,
-  ): Promise<ICreatedTweet> {
+  async answerPrevTweet(params: ITweetParams, i: number): Promise<ITweetData> {
     const fs = require('fs-extra');
 
     const imagePath = `./content/${i}-original.png`;
@@ -35,7 +27,7 @@ export default class ThreadService implements IThreadService {
         params,
       );
 
-      const createdTweet = lastTweetPromisse as any;
+      const createdTweet = lastTweetPromisse;
       this.lastTweetId = createdTweet.id_str;
 
       return createdTweet;
@@ -69,7 +61,7 @@ export default class ThreadService implements IThreadService {
       formattedObject,
     );
     this.lastTweetId = createdTweet.id_str;
-    return createdTweet as any;
+    return createdTweet;
   }
 
   async generateThread(): Promise<void> {

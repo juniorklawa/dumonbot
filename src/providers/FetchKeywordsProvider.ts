@@ -1,5 +1,5 @@
 import NaturalLanguageUnderstandingV1 from 'watson-developer-cloud/natural-language-understanding/v1.js';
-import IFetchKeywordsProvider from '../classes/interfaces/IFetchKeywordsProvider';
+import IFetchKeywordsProvider from '../interfaces/IFetchKeywordsProvider';
 
 export default class FetchKeywordsProvider implements IFetchKeywordsProvider {
   async fetchKeywords(sentence: string): Promise<string[]> {

@@ -1,4 +1,4 @@
-import IImageDownloaderProvider from '../classes/interfaces/IImageDownloaderProvider';
+import IImageDownloaderProvider from '../interfaces/IImageDownloaderProvider';
 
 export default class ImageDownloaderProvider
   implements IImageDownloaderProvider {

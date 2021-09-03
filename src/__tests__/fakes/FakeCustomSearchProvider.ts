@@ -1,12 +1,5 @@
+import { ICustomSearchData } from '../../interfaces/ICustomSearchData';
 import ICustomSearchProvider from '../../interfaces/ICustomSearchProvider';
-
-export interface ICustomSearchItem {
-  link: string;
-}
-
-export interface ICustomSearchData {
-  data: { items: ICustomSearchItem[] };
-}
 
 export default class FakeCustomSearchProvider implements ICustomSearchProvider {
   async getSearchResult(

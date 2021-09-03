@@ -1,3 +1,3 @@
 export default interface ICustomSearchProvider {
-  getSearchResult(googleSearchQuery: string): Promise<any>;
+  getSearchResult(googleSearchQuery: string): Promise<unknown>;
 }

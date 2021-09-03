@@ -1,4 +1,4 @@
-import sentenceBoundaryDetection, { sentences } from 'sbd';
+import sentenceBoundaryDetection from 'sbd';
 import { Content } from '../classes/Content';
 import { ISentence } from '../models/ISentence';
 import FetchKeywordsProvider from '../providers/FetchKeywordsProvider';
