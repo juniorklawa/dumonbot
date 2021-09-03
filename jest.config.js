@@ -31,6 +31,7 @@ module.exports = {
     'src/interfaces/*',
     'src/__tests__/fakes/*',
     'src/server.ts',
+    'src/tools',
   ],
 
   // Indicates which provider should be used to instrument code for coverage
