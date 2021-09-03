@@ -28,7 +28,7 @@ module.exports = {
     'src/classes/*',
     'src/models/*',
     'src/providers/*',
-    'src/services/interfaces/*',
+    'src/interfaces/*',
     'src/__tests__/fakes/*',
     'src/server.ts',
   ],

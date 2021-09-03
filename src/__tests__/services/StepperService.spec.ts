@@ -9,6 +9,7 @@ import FakeCustomSearchProvider from '../fakes/FakeCustomSearchProvider';
 import FakeFetchContentProvider from '../fakes/FakeFetchContentProvider';
 import FakeImageDownloaderProvider from '../fakes/FakeImageDownloaderProvider';
 import FakeFetchKeywordsProvider from '../fakes/FakeKeywordsProvider';
+import FakeTwitterProvider from '../fakes/FakeTwitterProvider';
 
 jest.mock('../../services/ContentService');
 jest.mock('../../services/FormatterService');
@@ -21,6 +22,7 @@ describe('StepperService', () => {
     const fakeFetchKeywordsProvider = new FakeFetchKeywordsProvider();
     const fakeCustomSearchProvider = new FakeCustomSearchProvider();
     const fakeImageDownloaderProvider = new FakeImageDownloaderProvider();
+    const fakeTwitterProvider = new FakeTwitterProvider();
 
     const mockedContent: Content = require('../mocks/content_working.json');
     const content = new Content(
@@ -45,7 +47,7 @@ describe('StepperService', () => {
       fakeCustomSearchProvider,
       fakeImageDownloaderProvider,
     );
-    const threadService = new ThreadService(content);
+    const threadService = new ThreadService(content, fakeTwitterProvider);
 
     const stepper = new StepperService(
       contentService,

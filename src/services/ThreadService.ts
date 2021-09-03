@@ -1,9 +1,11 @@
 import { Content } from '../classes/Content';
-import { ICreatedTweet } from '../models/ICreatedTweet';
 import { IThreadService } from '../interfaces/IThreadService';
+import { ICreatedTweet } from '../models/ICreatedTweet';
+import TwitterProvider from '../providers/TwitterProvider';
 
-interface ITweetData {
+export interface ITweetData {
   media_id_string: string;
+  id_str: string;
 }
 
 interface ITweetParams {
@@ -14,44 +16,26 @@ interface ITweetParams {
 export default class ThreadService implements IThreadService {
   private lastTweetId = '';
 
-  constructor(private content: Content) {}
+  constructor(
+    private content: Content,
+    private twitterProvider: TwitterProvider,
+  ) {}
 
   async answerPrevTweet(
     params: ITweetParams,
     i: number,
   ): Promise<ICreatedTweet> {
-    const Twit = require('twit');
-
     const fs = require('fs-extra');
 
-    const T = new Twit({
-      consumer_key: process.env.TWIT_CONSUMER_KEY,
-      consumer_secret: process.env.TWIT_CONSUMER_SECRET,
-      access_token: process.env.TWIT_ACCESS_TOKEN,
-      access_token_secret: process.env.TWIT_ACCESS_TOKEN_SECRET,
-      timeout_ms: 60 * 1000, // optional HTTP request timeout to apply to all requests.
-      strictSSL: true, // optional - requires SSL certificates to be valid.
-    });
     const imagePath = `./content/${i}-original.png`;
 
     if (i === this.content.sentences.length - 1 || !fs.existsSync(imagePath)) {
-      const lastTweetPromisse = new Promise((resolve, reject) => {
-        T.post('statuses/update', params, function (
-          err: string,
-          data: ITweetData,
-        ) {
-          if (err) {
-            reject(err);
-            return;
-          }
+      const lastTweetPromisse = await this.twitterProvider.post(
+        'statuses/update',
+        params,
+      );
 
-          if (data) {
-            resolve(data);
-          }
-        });
-      });
-
-      const createdTweet = (await lastTweetPromisse) as ICreatedTweet;
+      const createdTweet = lastTweetPromisse as any;
       this.lastTweetId = createdTweet.id_str;
 
       return createdTweet;
@@ -59,48 +43,33 @@ export default class ThreadService implements IThreadService {
 
     const b64content = fs.readFileSync(imagePath, { encoding: 'base64' });
 
-    const tweetPromise = new Promise((resolve, reject) => {
-      T.post('media/upload', { media_data: b64content }, function (
-        _: string,
-        data: ITweetData,
-      ) {
-        const mediaIdStr = data.media_id_string;
-        const altText = 'A picture';
-        const meta_params = {
-          media_id: mediaIdStr,
-          alt_text: { text: altText },
-        };
+    const { media_id_string } = await this.twitterProvider.post(
+      'media/upload',
+      {
+        media_data: b64content,
+      },
+    );
 
-        T.post('media/metadata/create', meta_params, async function (
-          err: string,
-        ) {
-          if (!err) {
-            const formattedObject = {
-              ...params,
-              media_ids: [mediaIdStr],
-            };
+    const mediaIdStr = media_id_string;
+    const altText = 'A picture';
+    const meta_params = {
+      media_id: mediaIdStr,
+      alt_text: { text: altText },
+    };
 
-            T.post('statuses/update', formattedObject, function (
-              err: string,
-              data: ITweetData,
-            ) {
-              if (err) {
-                reject(err);
-                return;
-              }
+    await this.twitterProvider.post('media/metadata/create', meta_params);
 
-              if (data) {
-                resolve(data);
-              }
-            });
-          }
-        });
-      });
-    });
+    const formattedObject = {
+      ...params,
+      media_ids: [mediaIdStr],
+    };
 
-    const createdTweet = (await tweetPromise) as ICreatedTweet;
+    const createdTweet = await this.twitterProvider.post(
+      'statuses/update',
+      formattedObject,
+    );
     this.lastTweetId = createdTweet.id_str;
-    return createdTweet;
+    return createdTweet as any;
   }
 
   async generateThread(): Promise<void> {

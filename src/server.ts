@@ -5,6 +5,7 @@ import CustomSearchProvider from './providers/CustomSearchProvider';
 import FetchContentProvider from './providers/FetchContentProvider';
 import FetchKeywordsProvider from './providers/FetchKeywordsProvider';
 import ImageDownloaderProvider from './providers/ImageDownloaderProvider';
+import TwitterProvider from './providers/TwitterProvider';
 import ContentService from './services/ContentService';
 import FormatterService from './services/FormatterService';
 import ImagesService from './services/ImageService';
@@ -33,6 +34,7 @@ async function run() {
   const fetchKeywordsProvider = new FetchKeywordsProvider();
   const customSearchProvider = new CustomSearchProvider();
   const imageDownloaderProvider = new ImageDownloaderProvider();
+  const twitterProvider = new TwitterProvider();
 
   const content = new Content('', '', [], subject, [], '');
   const contentService = new ContentService(content, fetchContentProvider);
@@ -42,7 +44,7 @@ async function run() {
     customSearchProvider,
     imageDownloaderProvider,
   );
-  const threadService = new ThreadService(content);
+  const threadService = new ThreadService(content, twitterProvider);
 
   const stepper = new StepperService(
     contentService,

@@ -117,17 +117,17 @@ export default class FormatterService implements IFormatterService {
       sentenceIndex,
       sentence,
     ] of this.content.sentences.entries()) {
-      console.log(`> [Formatter Service] Sentence: "${sentence.text}"`);
+      console.log(
+        `> [Formatter Service] Sentence ${sentenceIndex}: "${sentence.text}"`,
+      );
 
-      if (sentenceIndex !== sentences.length - 1) {
-        sentence.keywords = await this.fetchWatsonAndReturnKeywords(
-          sentence.text,
-        );
+      sentence.keywords = await this.fetchWatsonAndReturnKeywords(
+        sentence.text,
+      );
 
-        console.log(
-          `> [Formatter Service] Keywords: ${sentence.keywords.join(', ')}\n`,
-        );
-      }
+      console.log(
+        `> [Formatter Service] Keywords: ${sentence.keywords.join(', ')}\n`,
+      );
     }
   }
 }

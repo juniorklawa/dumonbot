@@ -1,6 +1,6 @@
 import { Content } from '../../classes/Content';
-import { ICreatedTweet } from '../../models/ICreatedTweet';
 import ThreadService from '../../services/ThreadService';
+import FakeTwitterProvider from '../fakes/FakeTwitterProvider';
 
 describe('ThreadService', () => {
   test('should generate a thread', async () => {
@@ -14,11 +14,13 @@ describe('ThreadService', () => {
       mockedContent.articleSource,
     );
 
-    const threadService = new ThreadService(content);
+    const fakeTwitterProvider = new FakeTwitterProvider();
 
-    jest.spyOn(threadService, 'answerPrevTweet').mockImplementation(() => {
-      return {} as Promise<ICreatedTweet>;
-    });
+    const threadService = new ThreadService(content, fakeTwitterProvider);
+
+    // jest.spyOn(threadService, 'answerPrevTweet').mockImplementation(() => {
+    //   return {} as Promise<ICreatedTweet>;
+    // });
 
     await threadService.generateThread();
   });

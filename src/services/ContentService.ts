@@ -21,6 +21,7 @@ export default class ContentService implements IContentService {
 
     this.content.sourceContentOriginal = doc.sections()[0].text();
     this.content.articleSource = doc.url();
+
     console.log('> [Content Service] Fetching done!');
   }
 }
