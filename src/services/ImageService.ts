@@ -11,115 +11,99 @@ export default class ImagesService implements IImageService {
   ) {}
 
   fetchImagesQueriesOfAllSentences(): void {
-    try {
-      console.log(
-        `> [Image Service] Fetching images queries of all sentences...`,
-      );
+    console.log(
+      `> [Image Service] Fetching images queries of all sentences...`,
+    );
 
-      for (const [index] of this.content.sentences.entries()) {
-        if (index !== this.content.sentences.length - 1) {
-          let query;
+    for (const [index] of this.content.sentences.entries()) {
+      if (index !== this.content.sentences.length - 1) {
+        let query;
 
-          if (index === 0) {
-            query = `${this.content.searchTerm}`;
-          } else if (index === 1) {
-            query = `${this.content.searchTerm} ${this.content.sentences[index].keywords[1]}`;
-          } else {
-            query = `${this.content.searchTerm} ${this.content.sentences[index].keywords[0]}`;
-          }
-
-          console.log(
-            `> [Image Service] Querying Google Images with: "${query}"`,
-          );
-
-          this.content.sentences[index].googleSearchQuery = query;
+        if (index === 0) {
+          query = `${this.content.searchTerm}`;
+        } else if (index === 1) {
+          query = `${this.content.searchTerm} ${this.content.sentences[index].keywords[1]}`;
+        } else {
+          query = `${this.content.searchTerm} ${this.content.sentences[index].keywords[0]}`;
         }
+
+        console.log(
+          `> [Image Service] Querying Google Images with: "${query}"`,
+        );
+
+        this.content.sentences[index].googleSearchQuery = query;
       }
-    } catch (err: any) {
-      throw new Error(err);
     }
   }
 
   async fetchGoogleImagesLinks(): Promise<string[] | null> {
-    try {
-      console.log(`> [Image Service] Fetching Google images links...`);
+    console.log(`> [Image Service] Fetching Google images links...`);
 
-      for await (const [index, sentence] of this.content.sentences.entries()) {
-        if (index !== this.content.sentences.length - 1) {
-          const response = await this.customSearchProvider.getSearchResult(
-            sentence.googleSearchQuery,
-          );
+    for await (const [index, sentence] of this.content.sentences.entries()) {
+      if (index !== this.content.sentences.length - 1) {
+        const response = await this.customSearchProvider.getSearchResult(
+          sentence.googleSearchQuery,
+        );
 
-          const { data } = response;
-          if (data.items) {
-            const imagesUrl = data.items.map((item: ICustomSearchItem) => {
-              return item.link;
-            });
+        const { data } = response;
+        if (data.items) {
+          const imagesUrl = data.items.map((item: ICustomSearchItem) => {
+            return item.link;
+          });
 
-            this.content.sentences[index].imagesLinks = imagesUrl as string[];
-          }
+          this.content.sentences[index].imagesLinks = imagesUrl as string[];
         }
       }
-
-      return null;
-    } catch (err: any) {
-      throw new Error(err);
     }
+
+    return null;
   }
 
   async downloadAllImages(): Promise<void> {
-    try {
-      console.log(`> [Image Service] Downloading all images...`);
-      this.content.downloadedImagesLinks = [];
+    console.log(`> [Image Service] Downloading all images...`);
+    this.content.downloadedImagesLinks = [];
 
-      for await (const [sentenceIndex] of this.content.sentences.entries()) {
-        if (sentenceIndex !== this.content.sentences.length - 1) {
-          const { imagesLinks } = this.content.sentences[sentenceIndex];
+    for await (const [sentenceIndex] of this.content.sentences.entries()) {
+      if (sentenceIndex !== this.content.sentences.length - 1) {
+        const { imagesLinks } = this.content.sentences[sentenceIndex];
 
-          for await (const [imageIndex, imageUrl] of imagesLinks.entries()) {
-            let imageDownloadUrl = imagesLinks[0];
+        for await (const [imageIndex, imageUrl] of imagesLinks.entries()) {
+          let imageDownloadUrl = imagesLinks[0];
 
-            if (
-              this.content.downloadedImagesLinks.includes(imageUrl) &&
-              imagesLinks.length > 1
-            ) {
-              imageDownloadUrl = imagesLinks[1];
-            }
-            try {
-              await this.downloadAndSave(
-                imageDownloadUrl,
-                `${sentenceIndex}-original.png`,
-              );
-              this.content.downloadedImagesLinks.push(imageDownloadUrl);
-              console.log(
-                `> [Image Service] [${sentenceIndex}][${imageIndex}] Image successfully downloaded: ${imageUrl}`,
-              );
-            } catch (error) {
-              console.log(
-                `> [Image Service] [${sentenceIndex}][${imageIndex}] Error (${imageDownloadUrl}): ${error}`,
-              );
-            }
+          if (
+            this.content.downloadedImagesLinks.includes(imageUrl) &&
+            imagesLinks.length > 1
+          ) {
+            imageDownloadUrl = imagesLinks[1];
+          }
+          try {
+            await this.downloadAndSave(
+              imageDownloadUrl,
+              `${sentenceIndex}-original.png`,
+            );
+            this.content.downloadedImagesLinks.push(imageDownloadUrl);
+            console.log(
+              `> [Image Service] [${sentenceIndex}][${imageIndex}] Image successfully downloaded: ${imageUrl}`,
+            );
+          } catch (error) {
+            console.log(
+              `> [Image Service] [${sentenceIndex}][${imageIndex}] Error (${imageDownloadUrl}): ${error}`,
+            );
           }
         }
       }
-    } catch (err: any) {
-      throw new Error(err);
     }
   }
 
   async downloadAndSave(url: string, fileName: string): Promise<void> {
-    try {
-      const fs = require('fs');
-      const dir = './content';
+    const fs = require('fs');
+    const dir = './content';
 
-      if (!fs.existsSync(dir)) {
-        await fs.mkdirSync(dir);
-      }
-
-      await this.imageDownloaderProvider.downloadImage(url, fileName);
-    } catch (err: any) {
-      throw new Error(err);
+    if (!fs.existsSync(dir)) {
+      await fs.mkdirSync(dir);
     }
+
+    await this.imageDownloaderProvider.downloadImage(url, fileName);
   }
 
   removeImages(): void {

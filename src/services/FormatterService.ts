@@ -103,40 +103,31 @@ export default class FormatterService implements IFormatterService {
   }
 
   fetchWatsonAndReturnKeywords(sentence: string): Promise<string[]> {
-    try {
-      const keywords = this.fetchKeywordsProvider.fetchKeywords(sentence);
-
-      return keywords;
-    } catch (err: any) {
-      throw new Error(err);
-    }
+    const keywords = this.fetchKeywordsProvider.fetchKeywords(sentence);
+    return keywords;
   }
 
   async fetchKeywordsOfAllSentences(): Promise<void> {
-    try {
-      console.log(
-        '> [Formatter Service] Starting to fetch keywords from Watson...',
-      );
+    console.log(
+      '> [Formatter Service] Starting to fetch keywords from Watson...',
+    );
 
-      // eslint-disable-next-line no-restricted-syntax
-      for await (const [
-        sentenceIndex,
-        sentence,
-      ] of this.content.sentences.entries()) {
-        console.log(`> [Formatter Service] Sentence: "${sentence.text}"`);
+    // eslint-disable-next-line no-restricted-syntax
+    for await (const [
+      sentenceIndex,
+      sentence,
+    ] of this.content.sentences.entries()) {
+      console.log(`> [Formatter Service] Sentence: "${sentence.text}"`);
 
-        if (sentenceIndex !== sentences.length - 1) {
-          sentence.keywords = await this.fetchWatsonAndReturnKeywords(
-            sentence.text,
-          );
+      if (sentenceIndex !== sentences.length - 1) {
+        sentence.keywords = await this.fetchWatsonAndReturnKeywords(
+          sentence.text,
+        );
 
-          console.log(
-            `> [Formatter Service] Keywords: ${sentence.keywords.join(', ')}\n`,
-          );
-        }
+        console.log(
+          `> [Formatter Service] Keywords: ${sentence.keywords.join(', ')}\n`,
+        );
       }
-    } catch (err: any) {
-      throw new Error(err);
     }
   }
 }

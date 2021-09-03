@@ -10,21 +10,17 @@ export default class ContentService implements IContentService {
 
   async fetchContent(): Promise<void> {
     console.log('> [Content Service] Starting...');
-    try {
-      console.log(
-        `> [Content Service] Fetching random content: ${this.content.searchTerm}`,
-      );
+    console.log(
+      `> [Content Service] Fetching random content: ${this.content.searchTerm}`,
+    );
 
-      const doc = await this.fetchContentProvider.fetch(
-        this.content.searchTerm,
-        'pt',
-      );
+    const doc = await this.fetchContentProvider.fetch(
+      this.content.searchTerm,
+      'pt',
+    );
 
-      this.content.sourceContentOriginal = doc.sections()[0].text();
-      this.content.articleSource = doc.url();
-      console.log('> [Content Service] Fetching done!');
-    } catch (e: any) {
-      throw new Error(e);
-    }
+    this.content.sourceContentOriginal = doc.sections()[0].text();
+    this.content.articleSource = doc.url();
+    console.log('> [Content Service] Fetching done!');
   }
 }

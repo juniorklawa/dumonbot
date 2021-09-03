@@ -6,7 +6,7 @@ import FetchContentProvider from './providers/FetchContentProvider';
 import FetchKeywordsProvider from './providers/FetchKeywordsProvider';
 import ImageDownloaderProvider from './providers/ImageDownloaderProvider';
 import ContentService from './services/ContentService';
-import  FormatterService  from './services/FormatterService';
+import FormatterService from './services/FormatterService';
 import ImagesService from './services/ImageService';
 import StepperService from './services/StepperService';
 import SubjectOfTheDayService from './services/SubjectOfTheDayService';
