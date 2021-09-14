@@ -6,6 +6,9 @@ import ICustomSearchProvider from '../interfaces/ICustomSearchProvider';
 import IImageDownloaderProvider from '../interfaces/IImageDownloaderProvider';
 import { IImageService } from '../interfaces/IImageService';
 import { IContent } from '../models/IContent';
+import levenDistance from '../utils/levenDistance';
+const fs = require('fs');
+const path = require('path');
 export default class ImagesService implements IImageService {
   constructor(
     private content: IContent,
@@ -70,27 +73,28 @@ export default class ImagesService implements IImageService {
       if (sentenceIndex !== this.content.sentences.length - 1) {
         const { imagesLinks } = this.content.sentences[sentenceIndex];
 
-        for await (const [imageIndex, imageUrl] of imagesLinks.entries()) {
-          let imageDownloadUrl = imagesLinks[0];
+        // const imageDownloadUrl = imagesLinks[imageIndex];
+        const imageDownloadUrl = imagesLinks.find(
+          imageLink => !this.content.downloadedImagesLinks.includes(imageLink),
+        );
 
-          if (
-            this.content.downloadedImagesLinks.includes(imageUrl) &&
-            imagesLinks.length > 1
-          ) {
-            imageDownloadUrl = imagesLinks[1];
-          }
+        if (imageDownloadUrl) {
           try {
+            const fileName = `${sentenceIndex}-original.png`;
+
             await this.downloadAndSave(
-              imageDownloadUrl,
-              `${sentenceIndex}-original.png`,
+              imageDownloadUrl?.replace('http://', 'https://'),
+              fileName,
             );
+
             this.content.downloadedImagesLinks.push(imageDownloadUrl);
+            await this.setImageHash(fileName);
             console.log(
-              `> [Image Service] [${sentenceIndex}][${imageIndex}] Image successfully downloaded: ${imageUrl}`,
+              `> [Image Service] [${sentenceIndex}] Image successfully downloaded: ${imageDownloadUrl}`,
             );
           } catch (error) {
             console.log(
-              `> [Image Service] [${sentenceIndex}][${imageIndex}] Error (${imageDownloadUrl}): ${error}`,
+              `> [Image Service] [${sentenceIndex}] Error (${imageDownloadUrl}): ${error}`,
             );
           }
         }
@@ -109,10 +113,68 @@ export default class ImagesService implements IImageService {
     await this.imageDownloaderProvider.downloadImage(url, fileName);
   }
 
-  removeImages(): void {
-    const fs = require('fs');
-    const path = require('path');
+  async setImageHash(fileName: string): Promise<void> {
+    const imghash = require('imghash');
 
+    const imagePath = `./content/${fileName}`;
+
+    const imageHash = await await imghash.hash(imagePath);
+
+    this.content.imageHashes.push(imageHash);
+  }
+
+  async removeDuplicates(): Promise<void> {
+    for (let i = 0; i < this.content.imageHashes.length; i++) {
+      for (let j = i + 1; j < this.content.imageHashes.length; j++) {
+        if (j !== i) {
+          const distance = levenDistance(
+            this.content.imageHashes[i],
+            this.content.imageHashes[j],
+          );
+
+          if (distance <= 3) {
+            const duplicatedImageUrl = this.content.downloadedImagesLinks[j];
+
+            const duplicatedIndexArray = this.content.sentences.reduce(
+              (acc, item, index: number) => {
+                if (
+                  item.imagesLinks?.some(
+                    imageLink => imageLink === duplicatedImageUrl,
+                  )
+                ) {
+                  acc.push(index);
+                }
+                return acc;
+              },
+              [],
+            );
+
+            console.log(`> [Image Service] - Found removing duplicates`);
+            duplicatedIndexArray.forEach((item, index) => {
+              if (index !== 0) {
+                this.removeOneImage(`${item}-original.png`);
+              }
+            });
+          }
+        }
+      }
+    }
+  }
+
+  removeOneImage(fileName: string): void {
+    const directory = 'content';
+
+    const filePath = path.join(directory, fileName.toString());
+    if (fs.existsSync(filePath)) {
+      fs.unlink(filePath, (err: string) => {
+        if (err) {
+          throw err;
+        }
+      });
+    }
+  }
+
+  removeImages(): void {
     const directory = 'content';
 
     fs.readdir(directory, (err: string, files: string[]) => {
