@@ -15,6 +15,7 @@ describe('ImageService', () => {
     })),
     mockedContent.searchTerm,
     [],
+    [],
     mockedContent.articleSource,
   );
 
