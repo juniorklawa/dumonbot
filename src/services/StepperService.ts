@@ -25,7 +25,7 @@ export default class StepperService implements IStepper {
       await this.imageService.downloadAllImages();
       await this.imageService.removeDuplicates();
       await this.threadService.generateThread();
-      this.imageService.removeImages();
+      // this.imageService.removeImages();
     } catch (err) {
       console.error(err);
     }
