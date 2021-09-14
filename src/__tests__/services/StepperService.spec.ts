@@ -31,6 +31,7 @@ describe('StepperService', () => {
       mockedContent.sentences,
       mockedContent.searchTerm,
       mockedContent.downloadedImagesLinks,
+      [],
       mockedContent.articleSource,
     );
 

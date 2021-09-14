@@ -11,6 +11,7 @@ describe('FormatterService', () => {
     [],
     'Leonardo da Vinci',
     [],
+    [],
     '',
   );
   const fakeFetchKeywordsProvider = new FakeFetchKeywordsProvider();

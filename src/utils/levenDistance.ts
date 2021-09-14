@@ -1,7 +1,7 @@
-const array = [];
-const characterCodeCache = [];
+const array: number[] = [];
+const characterCodeCache: number[] = [];
 
-export default function leven(first, second) {
+const leven = (first: string, second: string): number => {
   if (first === second) {
     return 0;
   }
@@ -84,5 +84,7 @@ export default function leven(first, second) {
     }
   }
 
-  return result;
-}
+  return result as number;
+};
+
+export default leven;

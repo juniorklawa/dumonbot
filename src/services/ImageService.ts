@@ -151,6 +151,7 @@ export default class ImagesService implements IImageService {
                     imageLink => imageLink === duplicatedImageUrl,
                   )
                 ) {
+                  // @ts-ignore
                   acc.push(index);
                 }
                 return acc;

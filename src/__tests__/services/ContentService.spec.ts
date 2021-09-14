@@ -6,7 +6,7 @@ describe('ContentService', () => {
   const fakeFetchContentProvider = new FakeFetchContentProvider();
 
   test('it should get article content and article source', async () => {
-    const content = new Content('', '', [], 'China', [], '');
+    const content = new Content('', '', [], 'China', [], [], '');
     const contentService = new ContentService(
       content,
       fakeFetchContentProvider,
