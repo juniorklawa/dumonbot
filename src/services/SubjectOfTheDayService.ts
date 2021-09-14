@@ -5,7 +5,7 @@ export default class SubjectOfTheDayService {
   async getSubjectOfTheDay(): Promise<ISubject> {
     console.log('> [Subject of the day service] Getting subject of the day...');
     const fetchedSubjectList = await Subject.aggregate([
-      { $match: { hasThread: true, isAllowed: true } },
+      { $match: { hasThread: false, isAllowed: true } },
       { $sample: { size: 1 } },
     ]);
 
