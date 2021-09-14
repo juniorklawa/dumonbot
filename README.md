@@ -5,3 +5,4 @@
 - Create new tests
 
 - Estados unidos (Estados unidos estados unidos - Duplicando images)
+- Check sentences length (Saturno)
