@@ -30,7 +30,17 @@ export default class ImagesService implements IImageService {
         } else if (index === 1) {
           query = `${this.content.searchTerm} ${this.content.sentences[index].keywords[1]}`;
         } else {
-          query = `${this.content.searchTerm} ${this.content.sentences[index].keywords[0]}`;
+          const filteredKeyword = this.content.sentences[index].keywords.find(
+            keyword =>
+              !this.content.sentences.some(sentence => {
+                return (
+                  `${this.content.searchTerm} ${keyword}` ===
+                  sentence.googleSearchQuery
+                );
+              }) && keyword !== this.content.searchTerm,
+          );
+
+          query = `${this.content.searchTerm} ${filteredKeyword}`;
         }
 
         console.log(
@@ -73,7 +83,6 @@ export default class ImagesService implements IImageService {
       if (sentenceIndex !== this.content.sentences.length - 1) {
         const { imagesLinks } = this.content.sentences[sentenceIndex];
 
-        // const imageDownloadUrl = imagesLinks[imageIndex];
         const imageDownloadUrl = imagesLinks.find(
           imageLink => !this.content.downloadedImagesLinks.includes(imageLink),
         );
