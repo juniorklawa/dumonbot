@@ -1,5 +1,6 @@
 import * as dotenv from 'dotenv';
 import mongoose from 'mongoose';
+import cron from 'node-cron';
 import Content from './classes/Content';
 import Subject from './models/Subject';
 import CustomSearchProvider from './providers/CustomSearchProvider';
@@ -13,7 +14,6 @@ import ImagesService from './services/ImageService';
 import StepperService from './services/StepperService';
 import SubjectOfTheDayService from './services/SubjectOfTheDayService';
 import ThreadService from './services/ThreadService';
-import cron from 'node-cron';
 
 async function run() {
   dotenv.config();
@@ -37,7 +37,8 @@ async function run() {
     const imageDownloaderProvider = new ImageDownloaderProvider();
     const twitterProvider = new TwitterProvider();
 
-    const content = new Content('', '', [], subject.name, [], '');
+    const content = new Content('', '', [], subject.name, [], [], '');
+
     const contentService = new ContentService(content, fetchContentProvider);
     const formatterService = new FormatterService(
       content,

@@ -41,6 +41,7 @@
     "fs-extra": "^9.1.0",
     "googleapis": "^67.1.1",
     "image-downloader": "^4.0.2",
+    "imghash": "^0.0.9",
     "mongoose": "^5.13.3",
     "morgan": "^1.10.0",
     "node-cron": "^3.0.0",

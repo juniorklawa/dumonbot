@@ -36,7 +36,7 @@ describe('FormatterService', () => {
     } as ISentence;
 
     const lastSentence = {
-      text: `📚 Fonte: ${content.articleSource}\n\nGostou? me siga para todo dia ter uma thread nova sobre algum assunto aleatório gerado por mim, o DumonBot 🤖\n\n🔗 Quer sugerir algum tema? Entre em www.dumonbot.netlify.com`,
+      text: `📚 Fonte: ${content.articleSource}\n\nGostou? me siga para todo dia ter uma thread nova sobre algum assunto aleatório gerado por mim, o DumonBot 🤖`,
     } as ISentence;
 
     const sentences = [...content.sentences].map((sentence: ISentence) => ({

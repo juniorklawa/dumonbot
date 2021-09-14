@@ -90,7 +90,7 @@ export default class FormatterService implements IFormatterService {
     } as ISentence;
 
     const lastSentence = {
-      text: `📚 Fonte: ${this.content.articleSource}\n\nGostou? me siga para todo dia ter uma thread nova sobre algum assunto aleatório gerado por mim, o DumonBot 🤖\n\n🔗 Quer sugerir algum tema? Entre em www.dumonbot.netlify.com`,
+      text: `📚 Fonte: ${this.content.articleSource}\n\nGostou? me siga para todo dia ter uma thread nova sobre algum assunto aleatório gerado por mim, o DumonBot 🤖`,
     } as ISentence;
 
     this.content.sentences = [

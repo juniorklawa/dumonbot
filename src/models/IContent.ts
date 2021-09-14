@@ -7,4 +7,5 @@ export interface IContent {
   downloadedImagesLinks: string[];
   searchTerm: string;
   articleSource: string;
+  imageHashes: string[];
 }
