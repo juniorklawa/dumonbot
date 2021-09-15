@@ -10,6 +10,7 @@ export default class CustomSearchProvider implements ICustomSearchProvider {
       cx: process.env.CUSTOM_SEARCH_CX,
       q: googleSearchQuery,
       searchType: 'image',
+      safe: 'active',
       num: 2,
     });
 
