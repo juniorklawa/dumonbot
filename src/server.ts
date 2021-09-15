@@ -26,10 +26,10 @@ async function run() {
   console.log('dumonbot server started 🚀');
 
   // cron.schedule('0 14 * * *', async () => {
-  const subjectOfTheDayService = new SubjectOfTheDayService();
+  // const subjectOfTheDayService = new SubjectOfTheDayService();
 
-  const subject = await subjectOfTheDayService.getSubjectOfTheDay();
-  console.log('[ server ] Today subject: ', subject.name);
+  // const subject = await subjectOfTheDayService.getSubjectOfTheDay();
+  // console.log('[ server ] Today subject: ', subject.name);
 
   const fetchContentProvider = new FetchContentProvider();
   const fetchKeywordsProvider = new FetchKeywordsProvider();
@@ -37,7 +37,8 @@ async function run() {
   const imageDownloaderProvider = new ImageDownloaderProvider();
   const twitterProvider = new TwitterProvider();
 
-  const content = new Content('', '', [], subject.name, [], [], '');
+  const content = new Content('', '', [], 'Saturno (planeta)', [], [], '');
+  // const content = require('../Estadosunidos.json');
 
   const contentService = new ContentService(content, fetchContentProvider);
   const formatterService = new FormatterService(content, fetchKeywordsProvider);
@@ -55,7 +56,7 @@ async function run() {
     threadService,
   );
 
-  await Subject.findOneAndUpdate({ _id: subject._id }, { hasThread: true });
+  // await Subject.findOneAndUpdate({ _id: subject._id }, { hasThread: true });
 
   await stepper.execute();
   // });

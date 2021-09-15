@@ -2,6 +2,7 @@ import { IThreadService } from '../interfaces/IThreadService';
 import { ITweetParams } from '../interfaces/ITweetParams';
 import ITwitterProvider from '../interfaces/ITwitterProvider';
 import { IContent } from '../models/IContent';
+import saveSnapShot from '../utils/saveSnapshot';
 
 export interface ITweetData {
   media_id_string: string;
@@ -68,7 +69,8 @@ export default class ThreadService implements IThreadService {
     console.log('> [Thread Service] Generating thread...');
 
     const { sentences } = this.content;
-
+    saveSnapShot(this.content);
+    return;
     for await (const [i, sentence] of sentences.entries()) {
       const params = {
         status: sentence.text,

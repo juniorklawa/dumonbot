@@ -10,7 +10,7 @@ const saveSnapShot = (content: IContent): void => {
 
   fs.writeFile(
     `${formattedSubjectName}.json`,
-    JSON.stringify(formattedSubjectName),
+    JSON.stringify(content),
     function (err: string) {
       if (err) {
         console.log(err);

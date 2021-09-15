@@ -1,8 +1,6 @@
 # dumonbot
 - Add more subjects
 - Write a decent readme hehe
-- If the first image fails to download, try to download the second
 - Create new tests
 
-- Estados unidos (Estados unidos estados unidos - Duplicando images)
-- Check sentences length (Saturno)
+- Check sentences length before creating (Saturno)
