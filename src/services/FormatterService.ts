@@ -47,8 +47,6 @@ export default class FormatterService implements IFormatterService {
       this.content.sourceContentSanitized,
     );
 
-    console.log(`SENTENCES`, sentences);
-
     sentences.forEach(sentence => {
       this.content.sentences.push({
         text: sentence,
