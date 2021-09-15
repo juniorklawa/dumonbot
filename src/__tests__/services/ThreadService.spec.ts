@@ -19,10 +19,6 @@ describe('ThreadService', () => {
 
     const threadService = new ThreadService(content, fakeTwitterProvider);
 
-    // jest.spyOn(threadService, 'answerPrevTweet').mockImplementation(() => {
-    //   return {} as Promise<ICreatedTweet>;
-    // });
-
     await threadService.generateThread();
   });
 });

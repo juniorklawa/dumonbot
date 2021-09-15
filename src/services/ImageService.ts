@@ -34,10 +34,11 @@ export default class ImagesService implements IImageService {
             keyword =>
               !this.content.sentences.some(sentence => {
                 return (
-                  `${this.content.searchTerm} ${keyword}` ===
-                  sentence.googleSearchQuery
+                  `${this.content.searchTerm} ${keyword}`.toLowerCase() ===
+                  sentence.googleSearchQuery?.toLowerCase()
                 );
-              }) && keyword !== this.content.searchTerm,
+              }) &&
+              keyword?.toLowerCase() !== this.content.searchTerm?.toLowerCase(),
           );
 
           query = `${this.content.searchTerm} ${filteredKeyword}`;
@@ -83,7 +84,7 @@ export default class ImagesService implements IImageService {
       if (sentenceIndex !== this.content.sentences.length - 1) {
         const { imagesLinks } = this.content.sentences[sentenceIndex];
 
-        const imageDownloadUrl = imagesLinks.find(
+        const imageDownloadUrl = imagesLinks?.find(
           imageLink => !this.content.downloadedImagesLinks.includes(imageLink),
         );
 
@@ -159,9 +160,11 @@ export default class ImagesService implements IImageService {
               [],
             );
 
-            console.log(`> [Image Service] - Found removing duplicates`);
             duplicatedIndexArray.forEach((item, index) => {
-              if (index !== 0) {
+              if (index !== 0 || duplicatedIndexArray.length === 1) {
+                console.log(
+                  `> [Image Service] - Removing duplicate ${item}-original.png`,
+                );
                 this.removeOneImage(`${item}-original.png`);
               }
             });

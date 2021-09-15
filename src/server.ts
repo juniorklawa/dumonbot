@@ -25,7 +25,7 @@ async function run() {
 
   console.log('dumonbot server started 🚀');
 
-  cron.schedule('0 14 * * *', async () => {
+  cron.schedule('0 13 * * *', async () => {
     const subjectOfTheDayService = new SubjectOfTheDayService();
 
     const subject = await subjectOfTheDayService.getSubjectOfTheDay();

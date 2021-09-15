@@ -46,6 +46,7 @@ export default class FormatterService implements IFormatterService {
     const sentences = sentenceBoundaryDetection.sentences(
       this.content.sourceContentSanitized,
     );
+
     sentences.forEach(sentence => {
       this.content.sentences.push({
         text: sentence,

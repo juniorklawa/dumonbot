@@ -68,7 +68,6 @@ export default class ThreadService implements IThreadService {
     console.log('> [Thread Service] Generating thread...');
 
     const { sentences } = this.content;
-
     for await (const [i, sentence] of sentences.entries()) {
       const params = {
         status: sentence.text,
