@@ -45,7 +45,7 @@ describe('ImageService', () => {
 
     await imageService.downloadAllImages();
 
-    expect(imageService.downloadAndSave).toHaveBeenCalledTimes(24);
+    expect(imageService.downloadAndSave).toHaveBeenCalledTimes(1);
   });
 
   test('should remove all images', async () => {
