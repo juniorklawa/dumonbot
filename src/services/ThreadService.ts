@@ -1,7 +1,7 @@
 import { IThreadService } from '../interfaces/IThreadService';
 import { ITweetParams } from '../interfaces/ITweetParams';
 import ITwitterProvider from '../interfaces/ITwitterProvider';
-import { IContent } from '../models/IContent';
+import { IContent } from '../interfaces/IContent';
 
 export interface ITweetData {
   media_id_string: string;

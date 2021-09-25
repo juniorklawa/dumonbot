@@ -5,7 +5,7 @@ import {
 import ICustomSearchProvider from '../interfaces/ICustomSearchProvider';
 import IImageDownloaderProvider from '../interfaces/IImageDownloaderProvider';
 import { IImageService } from '../interfaces/IImageService';
-import { IContent } from '../models/IContent';
+import { IContent } from '../interfaces/IContent';
 import levenDistance from '../utils/levenDistance';
 const fs = require('fs');
 const path = require('path');

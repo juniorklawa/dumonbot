@@ -1,5 +1,5 @@
 import Content from '../../classes/Content';
-import { ISentence } from '../../models/ISentence';
+import { ISentence } from '../../interfaces/ISentence';
 import FormatterService from '../../services/FormatterService';
 import FakeFetchKeywordsProvider from '../fakes/FakeKeywordsProvider';
 
