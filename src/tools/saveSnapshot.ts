@@ -1,4 +1,4 @@
-import { IContent } from '../models/IContent';
+import { IContent } from '../interfaces/IContent';
 
 const fs = require('fs');
 

@@ -1,8 +1,8 @@
 import sentenceBoundaryDetection from 'sbd';
 import IFetchKeywordsProvider from '../interfaces/IFetchKeywordsProvider';
 import { IFormatterService } from '../interfaces/IFormatterService';
-import { IContent } from '../models/IContent';
-import { ISentence } from '../models/ISentence';
+import { IContent } from '../interfaces/IContent';
+import { ISentence } from '../interfaces/ISentence';
 
 export default class FormatterService implements IFormatterService {
   constructor(
