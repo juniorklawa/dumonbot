@@ -1,6 +1,5 @@
 import * as dotenv from 'dotenv';
 import mongoose from 'mongoose';
-import cron from 'node-cron';
 import Content from './classes/Content';
 import Subject from './models/Subject';
 import CustomSearchProvider from './providers/CustomSearchProvider';
@@ -14,6 +13,11 @@ import ImagesService from './services/ImageService';
 import StepperService from './services/StepperService';
 import SubjectOfTheDayService from './services/SubjectOfTheDayService';
 import ThreadService from './services/ThreadService';
+import express from 'express';
+
+const app = express();
+
+app.use(express.json());
 
 async function run() {
   dotenv.config();
@@ -23,45 +27,44 @@ async function run() {
     useUnifiedTopology: true,
   });
 
-  console.log('dumonbot server started 🚀');
+  const subjectOfTheDayService = new SubjectOfTheDayService();
 
-  cron.schedule('0 13 * * *', async () => {
-    const subjectOfTheDayService = new SubjectOfTheDayService();
+  const subject = await subjectOfTheDayService.getSubjectOfTheDay();
+  console.log('[ server ] Today subject: ', subject.name);
 
-    const subject = await subjectOfTheDayService.getSubjectOfTheDay();
-    console.log('[ server ] Today subject: ', subject.name);
+  const fetchContentProvider = new FetchContentProvider();
+  const fetchKeywordsProvider = new FetchKeywordsProvider();
+  const customSearchProvider = new CustomSearchProvider();
+  const imageDownloaderProvider = new ImageDownloaderProvider();
+  const twitterProvider = new TwitterProvider();
 
-    const fetchContentProvider = new FetchContentProvider();
-    const fetchKeywordsProvider = new FetchKeywordsProvider();
-    const customSearchProvider = new CustomSearchProvider();
-    const imageDownloaderProvider = new ImageDownloaderProvider();
-    const twitterProvider = new TwitterProvider();
+  const content = new Content('', '', [], subject.name, [], [], '');
 
-    const content = new Content('', '', [], subject.name, [], [], '');
+  const contentService = new ContentService(content, fetchContentProvider);
+  const formatterService = new FormatterService(content, fetchKeywordsProvider);
+  const imageService = new ImagesService(
+    content,
+    customSearchProvider,
+    imageDownloaderProvider,
+  );
+  const threadService = new ThreadService(content, twitterProvider);
 
-    const contentService = new ContentService(content, fetchContentProvider);
-    const formatterService = new FormatterService(
-      content,
-      fetchKeywordsProvider,
-    );
-    const imageService = new ImagesService(
-      content,
-      customSearchProvider,
-      imageDownloaderProvider,
-    );
-    const threadService = new ThreadService(content, twitterProvider);
+  const stepper = new StepperService(
+    contentService,
+    formatterService,
+    imageService,
+    threadService,
+  );
 
-    const stepper = new StepperService(
-      contentService,
-      formatterService,
-      imageService,
-      threadService,
-    );
+  await Subject.findOneAndUpdate({ _id: subject._id }, { hasThread: true });
 
-    await Subject.findOneAndUpdate({ _id: subject._id }, { hasThread: true });
-
-    await stepper.execute();
-  });
+  await stepper.execute();
 }
 
 run();
+
+app.get('/', async (_, res) => {
+  res.json({ message: 'status: online 🚀' });
+});
+
+app.listen(process.env.PORT || 3333, () => console.log('Server started 🚀'));
