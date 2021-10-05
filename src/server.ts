@@ -20,6 +20,12 @@ const app = express();
 app.use(express.json());
 
 async function run() {
+  const today = new Date().getUTCDate();
+
+  if (today % 2 !== 0) {
+    return;
+  }
+
   dotenv.config();
 
   mongoose.connect(process.env.MONGO_URL as string, {
@@ -64,7 +70,13 @@ async function run() {
 run();
 
 app.get('/', async (_, res) => {
-  res.json({ message: 'status: online 🚀' });
+  const today = new Date().getUTCDate();
+
+  res.json({
+    message: `status: online 🚀 ${
+      today % 2 !== 0 ? 'but im not working today' : ''
+    }`,
+  });
 });
 
 app.listen(process.env.PORT || 3333, () => console.log('Server started 🚀'));
