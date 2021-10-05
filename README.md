@@ -55,6 +55,9 @@ Dumonbot is a twitter bot that generates threads about all knowledge areas.
 ## Why dumont?
 Santos Dumont is considered a polymath (a person who knows many sciences) since he was a great Brazilian inventor, having inventions such as: the airplane and the airship. The bot's intention is, as Santos Dumont did, to show and spread the most diverse areas of human knowledge.
 
+## Inspiration
+This project is inspired by the [video-maker](https://github.com/filipedeschamps/video-maker) project
+
 
 ### Built With
 
