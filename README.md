@@ -42,13 +42,19 @@
 ## About The Project
 
 
-Strackify is an App for those who like to read to the sound of a playlist or soundtrack. With it you can search, bookmark and create playlists that match the book you are currently reading
+Dumonbot is a twitter bot that generates threads about all knowledge areas.
+
+## Why dumont?
+Santos Dumont is considered a polymath (a person who knows many sciences) since he was a great Brazilian inventor, having inventions such as: the airplane and the airship. The bot's intention is, as Santos Dumont did, to show and spread the most diverse areas of human knowledge.
+
 
 ### Built With
-This section should list any major frameworks that you built your project using. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
-* [React Native](https://reactnative.dev/)
-* [Firebase](https://firebase.google.com/)
-* [Google Books](https://books.google.com.br/)
+
+* [NodeJS](https://nodejs.org/en/)
+* [MongoDB](https://www.mongodb.com/)
+* [IBM Watson](https://www.ibm.com/br-pt/watson)
+* [wtf_wikipedia](https://github.com/spencermountain/wtf_wikipedia)
+* [Heroku](https://www.heroku.com/)
 
 
 <!-- GETTING STARTED -->
@@ -58,7 +64,7 @@ This section should list any major frameworks that you built your project using.
 
 1. Clone the repo
 ```sh
-git clone https://github.com/juniorklawa/strackify-app-public.git
+git clone git@github.com:juniorklawa/dumonbot.git
 ```
 3. Install packages
 ```sh
@@ -66,26 +72,27 @@ yarn or npm install
 ```
 4. Enter your api keys in `.env.example`
 ```JS
-  SPOTIFY_API: 'https://api.spotify.com/v1',
-  SPOTIFY_CLIENT_ID: 'YOUR ID',
-  SPOTIFY_REDIRECT_URL: 'YOUR REDIRECT URL',
-  SPOTIFY_TOKEN_REFRESH_URL: 'YOUR TOKEN REFRESH',
-  SPOTIFY_TOKEN_SWAP_URL: 'YOUR SWAP URL',
+ALGORITHMIA_KEY= 'YOUR_ALGORITHMIA_KEY_KEY'
+WATSON_KEY= 'YOUR_WATSON_KEY_KEY'
+CUSTOM_SEARCH_AUTH= 'YOUR_CUSTOM_SEARCH_AUTH_KEY'
+CUSTOM_SEARCH_CX= 'YOUR_CUSTOM_SEARCH_CX_KEY'
+NLU_URL= 'YOUR_NLU_URL_KEY'
+MONGO_URL= 'YOUR_MONGO_URL_KEY'
+TWIT_CONSUMER_KEY= 'YOUR_TWIT_CONSUMER_KEY_KEY'
+TWIT_CONSUMER_SECRET= 'YOUR_TWIT_CONSUMER_SECRET_KEY'
+TWIT_ACCESS_TOKEN_SECRET= 'YOUR_TWIT_ACCESS_TOKEN_SECRET_KEY'
+TWIT_ACCESS_TOKEN= 'YOUR_TWIT_ACCESS_TOKEN_KEY'
 ```
-5. Add your firebase project `google_services.json` in `android/app` folder
-
-6. Add your keystore `SHA1 signature` and `package name` in Spotify Developer dashboard
-
-3. Run
+5. Run
 ```sh
-npx react-native run-android
+yarn dev:server
 ```
 
 
 <!-- ROADMAP -->
 ## Known issues
 
- - Pagination
+ - Images unrelated to the subject
 
 
 <!-- CONTRIBUTING -->
