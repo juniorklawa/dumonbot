@@ -19,7 +19,6 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/juniorklawa/dumonbot"><img src="https://img.shields.io/github/stars/juniorklawa/dumonbot"></a>
 <a href="https://github.com/juniorklawa/dumonbot/actions"><img src="https://github.com/juniorklawa/dumonbot/workflows/Tests/badge.svg"></a>
    <a href="https://github.com/prettier/prettier"><img src="https://img.shields.io/badge/styled_with-prettier-ff69b4.svg"></a>
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-blue.svg"></a>
