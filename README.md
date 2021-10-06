@@ -8,7 +8,7 @@
   <h2 align="center">Dumonbot</h2>
 
   <p align="center">
-   A bot that creates threads on the most diverse areas of knowledge.
+   A bot that creates twitter threads on the most diverse areas of knowledge.
 </a>
     <br />
     <br />
