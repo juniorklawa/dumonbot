@@ -11,6 +11,7 @@ import ContentService from './services/ContentService';
 import FormatterService from './services/FormatterService';
 import ImagesService from './services/ImageService';
 import StepperService from './services/StepperService';
+import cron from 'node-cron';
 import SubjectOfTheDayService from './services/SubjectOfTheDayService';
 import ThreadService from './services/ThreadService';
 import express from 'express';
@@ -20,51 +21,56 @@ const app = express();
 app.use(express.json());
 
 async function run() {
-  const today = new Date().getUTCDate();
+  cron.schedule('0 15 * * *', async () => {
+    const today = new Date().getUTCDate();
 
-  if (today % 2 !== 0) {
-    return;
-  }
+    if (today % 2 !== 0) {
+      return;
+    }
 
-  dotenv.config();
+    dotenv.config();
 
-  mongoose.connect(process.env.MONGO_URL as string, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
+    mongoose.connect(process.env.MONGO_URL as string, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+
+    const subjectOfTheDayService = new SubjectOfTheDayService();
+
+    const subject = await subjectOfTheDayService.getSubjectOfTheDay();
+    console.log('[ server ] Today subject: ', subject.name);
+
+    const fetchContentProvider = new FetchContentProvider();
+    const fetchKeywordsProvider = new FetchKeywordsProvider();
+    const customSearchProvider = new CustomSearchProvider();
+    const imageDownloaderProvider = new ImageDownloaderProvider();
+    const twitterProvider = new TwitterProvider();
+
+    const content = new Content('', '', [], subject.name, [], [], '');
+
+    const contentService = new ContentService(content, fetchContentProvider);
+    const formatterService = new FormatterService(
+      content,
+      fetchKeywordsProvider,
+    );
+    const imageService = new ImagesService(
+      content,
+      customSearchProvider,
+      imageDownloaderProvider,
+    );
+    const threadService = new ThreadService(content, twitterProvider);
+
+    const stepper = new StepperService(
+      contentService,
+      formatterService,
+      imageService,
+      threadService,
+    );
+
+    await Subject.findOneAndUpdate({ _id: subject._id }, { hasThread: true });
+
+    await stepper.execute();
   });
-
-  const subjectOfTheDayService = new SubjectOfTheDayService();
-
-  const subject = await subjectOfTheDayService.getSubjectOfTheDay();
-  console.log('[ server ] Today subject: ', subject.name);
-
-  const fetchContentProvider = new FetchContentProvider();
-  const fetchKeywordsProvider = new FetchKeywordsProvider();
-  const customSearchProvider = new CustomSearchProvider();
-  const imageDownloaderProvider = new ImageDownloaderProvider();
-  const twitterProvider = new TwitterProvider();
-
-  const content = new Content('', '', [], subject.name, [], [], '');
-
-  const contentService = new ContentService(content, fetchContentProvider);
-  const formatterService = new FormatterService(content, fetchKeywordsProvider);
-  const imageService = new ImagesService(
-    content,
-    customSearchProvider,
-    imageDownloaderProvider,
-  );
-  const threadService = new ThreadService(content, twitterProvider);
-
-  const stepper = new StepperService(
-    contentService,
-    formatterService,
-    imageService,
-    threadService,
-  );
-
-  await Subject.findOneAndUpdate({ _id: subject._id }, { hasThread: true });
-
-  await stepper.execute();
 }
 
 run();
