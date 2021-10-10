@@ -21,6 +21,7 @@ const app = express();
 app.use(express.json());
 
 async function run() {
+  console.log('status: online 🚀 ');
   cron.schedule('0 15 * * *', async () => {
     const today = new Date().getUTCDate();
 
